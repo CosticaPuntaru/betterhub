@@ -1,0 +1,375 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  color: #24292e;
+  background-color: #ffffff;
+}
+
+.options-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.options-header {
+  margin-bottom: 32px;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 16px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.options-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.import-export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.import-export-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #ffffff;
+  color: #24292e;
+}
+
+.import-export-btn:hover {
+  background-color: #f6f8fa;
+  border-color: #0366d6;
+}
+
+.import-export-btn:active {
+  background-color: #e1e4e8;
+}
+
+.export-btn {
+  color: #0366d6;
+  border-color: #0366d6;
+}
+
+.export-btn:hover {
+  background-color: #0366d6;
+  color: #ffffff;
+}
+
+.import-btn {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.import-btn:hover {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.reset-btn {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.reset-btn:hover {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.options-search {
+  margin-top: 16px;
+}
+
+.options-search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.options-search input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.options-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.feature-settings-section {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 24px;
+  background-color: #fafbfc;
+}
+
+.feature-settings-header {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.feature-settings-description {
+  margin: 0 0 16px 0;
+  color: #586069;
+  font-size: 14px;
+}
+
+.feature-settings-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-label {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.setting-description {
+  margin: 0;
+  font-size: 12px;
+  color: #586069;
+}
+
+.setting-input {
+  padding: 6px 12px;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.setting-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.setting-input[type='checkbox'] {
+  width: auto;
+  cursor: pointer;
+}
+
+.setting-input[type='number'] {
+  width: 120px;
+}
+
+.setting-input[type='text'],
+.setting-input[type='textarea'] {
+  width: 100%;
+  max-width: 400px;
+}
+
+.setting-input textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.setting-input select {
+  width: 200px;
+  cursor: pointer;
+}
+
+/* Global Master Toggle Styles */
+.global-master-toggle-container {
+  margin: 0 0 32px 0;
+  padding: 24px;
+  background: linear-gradient(135deg, #0366d6 0%, #0550ae 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(3, 102, 214, 0.2);
+}
+
+.global-master-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.global-master-toggle-checkbox {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  accent-color: #ffffff;
+  flex-shrink: 0;
+}
+
+.global-master-toggle-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  user-select: none;
+}
+
+.global-master-toggle-description {
+  margin: 8px 0 0 48px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  user-select: none;
+}
+
+/* Master Toggle Styles (Feature-level) */
+.feature-master-toggle {
+  margin: 20px 0;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 2px solid #0366d6;
+  border-radius: 6px;
+}
+
+.master-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.master-toggle-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #0366d6;
+}
+
+.master-toggle-text {
+  user-select: none;
+}
+
+/* Page Toggles Styles */
+.feature-pages-container {
+  margin: 20px 0;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+}
+
+.feature-pages-header {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292e;
+}
+
+.feature-pages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.page-toggle-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.page-toggle-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #0366d6;
+}
+
+.page-toggle-text {
+  user-select: none;
+}
+
+.page-toggle-description {
+  margin: 0 0 0 26px;
+  font-size: 12px;
+  color: #586069;
+}
+
+/* Disabled state */
+.setting-input:disabled,
+.master-toggle-checkbox:disabled,
+.page-toggle-checkbox:disabled,
+.global-master-toggle-checkbox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* When extension is disabled, fade all features */
+body:has(.global-master-toggle-checkbox:not(:checked)) .feature-settings-section {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Import/Export Notification */
+.import-export-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.import-export-notification.success {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.import-export-notification.error {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+

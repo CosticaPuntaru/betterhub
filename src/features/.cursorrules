@@ -1,0 +1,33 @@
+# Features Zone Rules
+
+## Purpose
+Self-contained feature modules - all code for a feature in one directory.
+
+## Structure
+Each feature directory contains:
+- `index.ts` - Registration, metadata, settings schema
+- `content.ts` - Content script code (required)
+- `popup.ts` - Popup UI (optional)
+- `options.ts` - Custom options UI (optional, usually not needed)
+- `styles.css` - Feature styles
+- `types.ts` - Feature-specific types
+- `translations.ts` - Translation keys
+
+## Patterns
+- Register feature in `index.ts` using `featureRegistry.register()`
+- Export `initialize(settings)` and `cleanup()` from `content.ts`
+- Define settings schema in `index.ts` for automatic UI generation
+- Use `settingsManager.subscribe()` for real-time updates
+
+## Adding a New Feature
+1. Create feature directory
+2. Define settings in `src/shared/types/settings.ts`
+3. Create settings schema in feature `index.ts`
+4. Implement `content.ts` with initialize/cleanup
+5. Feature auto-appears in options page
+
+## What NOT to Do
+- Don't scatter feature code across directories
+- Don't hardcode settings - use settings manager
+- Don't forget to cleanup observers/listeners
+

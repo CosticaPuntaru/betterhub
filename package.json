@@ -1,0 +1,59 @@
+{
+  "name": "betterhub",
+  "version": "1.0.0",
+  "description": "GitHub customization extension with feature-based architecture",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "dev:options": "vite --mode development",
+    "build": "vite build",
+    "build:chrome": "vite build --mode chrome",
+    "build:firefox": "vite build --mode firefox",
+    "build:edge": "vite build --mode edge",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
+    "harvest:translations": "node scripts/harvest-translations.js",
+    "type-check": "tsc --noEmit",
+    "chrome:debug": "launch-chrome-debug.bat",
+    "test:browser": "pnpm build && pnpm chrome:debug"
+  },
+  "keywords": [
+    "github",
+    "extension",
+    "chrome-extension",
+    "browser-extension"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "i18next": "^23.7.6",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "lucide-react": "^0.553.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.4.0",
+    "webextension-polyfill": "^0.12.0"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.22",
+    "@types/chrome": "^0.0.251",
+    "@types/node": "^20.10.6",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@types/webextension-polyfill": "^0.10.7",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^8.56.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.1.1",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11"
+  }
+}

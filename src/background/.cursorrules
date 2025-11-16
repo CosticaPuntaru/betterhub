@@ -1,0 +1,24 @@
+# Background Zone Rules
+
+## Purpose
+Service worker for Manifest V3 - handles extension lifecycle and cross-tab coordination.
+
+## Key Files
+- `service-worker.ts` - Main service worker entry point
+
+## Patterns
+- Use `webextension-polyfill` for cross-browser compatibility
+- Listen to `runtime.onInstalled` for initialization
+- Use `settingsManager` from shared utils for settings access
+- Broadcast settings changes to all GitHub tabs
+
+## Common Tasks
+- Initialize settings on install
+- Listen for settings changes and notify tabs
+- Handle extension updates
+
+## What NOT to Do
+- Don't access DOM (service workers don't have DOM)
+- Don't use long-running operations (service workers can be terminated)
+- Don't store large amounts of data in memory
+

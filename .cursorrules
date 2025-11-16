@@ -1,0 +1,32 @@
+# BetterHub Project Rules
+
+## Project Overview
+BetterHub is a cross-browser Chrome extension for GitHub customization with a feature-based architecture.
+
+## Key Conventions
+- Use strict TypeScript with no implicit any
+- All features are self-contained in `src/features/feature-name/`
+- Settings are managed centrally via `src/shared/utils/settings-manager.ts`
+- Use i18next for translations - write English strings directly in code
+- Features export settings schemas for automatic UI generation
+- Real-time settings sync across all contexts
+
+## File Structure
+- `src/features/` - Feature modules (self-contained)
+- `src/shared/` - Shared utilities, types, constants
+- `src/background/` - Service worker
+- `src/content/` - Content scripts
+- `src/popup/` - Extension popup
+- `src/options/` - Settings page
+
+## Adding a New Feature
+1. Create directory `src/features/feature-name/`
+2. Create `index.ts` with feature registration and settings schema
+3. Create `content.ts` for GitHub UI modifications
+4. Add feature settings to `src/shared/types/settings.ts`
+5. Feature will auto-register and appear in options page
+
+## References
+- See zone-specific `.cursorrules` files for detailed patterns
+- See `docs/` directory for architecture and development guides
+

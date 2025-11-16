@@ -1,0 +1,35 @@
+# Shared Zone Rules
+
+## Purpose
+Shared utilities, types, and constants used across the extension.
+
+## Key Directories
+- `types/` - TypeScript type definitions
+- `utils/` - Utility functions
+- `constants/` - Constants and feature registry
+- `locales/` - Translation files
+
+## Key Files
+- `utils/settings-manager.ts` - Centralized settings management
+- `utils/feature-registry.ts` - Feature registration system
+- `utils/i18n.ts` - Internationalization utilities
+- `utils/settings-renderer.ts` - Settings UI rendering
+- `types/settings.ts` - Settings type definitions
+- `types/settings-ui.ts` - Settings UI schema types
+
+## Patterns
+- All settings go through `settingsManager`
+- Features register via `featureRegistry`
+- Use i18next for translations
+- Settings schemas define UI declaratively
+
+## Common Tasks
+- Add new setting types to `types/settings.ts`
+- Use `settingsManager.subscribe()` for real-time updates
+- Register features with `featureRegistry.register()`
+
+## What NOT to Do
+- Don't access chrome.storage directly - use `settingsManager`
+- Don't duplicate utility functions
+- Don't forget to type everything
+

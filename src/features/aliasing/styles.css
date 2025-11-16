@@ -1,0 +1,307 @@
+/**
+ * Styles for aliasing feature
+ */
+
+.alias-list-section {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  background-color: #fafbfc;
+}
+
+.alias-list-header {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292e;
+}
+
+.alias-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.alias-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+}
+
+.alias-enabled-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.alias-enabled-checkbox {
+  cursor: pointer;
+}
+
+.alias-original {
+  font-size: 13px;
+  color: #586069;
+  font-weight: 500;
+}
+
+.alias-input-label,
+.alias-display-type-label,
+.alias-color-label,
+.alias-icon-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #24292e;
+}
+
+.alias-input,
+.alias-icon-input {
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.alias-input:focus,
+.alias-icon-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.alias-display-type-select {
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+.alias-color-input {
+  width: 60px;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.alias-add-button,
+.alias-delete-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.alias-add-button {
+  background-color: #28a745;
+  color: #fff;
+  border-color: #28a745;
+}
+
+.alias-add-button:hover {
+  background-color: #22863a;
+}
+
+.alias-delete-button {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.alias-delete-button:hover {
+  background-color: #c82333;
+}
+
+.alias-list-field-container {
+  margin-top: 10px;
+}
+
+.alias-preview {
+  margin-top: 8px;
+}
+
+.alias-icon-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alias-use-actual-photo-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.alias-use-actual-photo-checkbox {
+  cursor: pointer;
+}
+
+.alias-icon-url-label,
+.alias-icon-file-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #24292e;
+}
+
+.alias-icon-url-input {
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.alias-icon-url-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.alias-icon-file-input {
+  padding: 4px;
+  font-size: 13px;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.alias-icon-preview {
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Harvest whitelist styles */
+.harvest-whitelist-section {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  background-color: #f6f8fa;
+}
+
+.harvest-whitelist-header {
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.harvest-whitelist-description {
+  margin: 0 0 12px 0;
+  color: #586069;
+  font-size: 0.9em;
+}
+
+.harvest-allow-all-container {
+  margin-bottom: 12px;
+}
+
+.harvest-allow-all-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.harvest-whitelist-container {
+  margin: 12px 0;
+}
+
+.harvest-whitelist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+}
+
+.harvest-whitelist-item-text {
+  flex: 1;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.harvest-whitelist-delete-btn {
+  padding: 4px 12px;
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.harvest-whitelist-delete-btn:hover {
+  background-color: #c82333;
+}
+
+.harvest-whitelist-add-form {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.harvest-whitelist-input {
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.harvest-whitelist-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.harvest-whitelist-add-btn {
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #28a745;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.harvest-whitelist-add-btn:hover {
+  background-color: #22863a;
+  border-color: #22863a;
+}
+

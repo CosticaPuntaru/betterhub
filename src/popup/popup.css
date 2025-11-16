@@ -1,0 +1,45 @@
+.popup-container {
+  width: 300px;
+  min-height: 200px;
+  padding: 16px;
+}
+
+.popup-header {
+  margin-bottom: 16px;
+}
+
+.popup-header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.popup-content {
+  margin-bottom: 16px;
+}
+
+.popup-footer {
+  border-top: 1px solid #e1e4e8;
+  padding-top: 12px;
+  text-align: center;
+}
+
+.popup-footer a {
+  color: #0366d6;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.popup-footer a:hover {
+  text-decoration: underline;
+}
+
+.popup-welcome {
+  text-align: center;
+  color: #586069;
+}
+
+.popup-welcome p {
+  margin: 8px 0;
+}
+

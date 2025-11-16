@@ -1,0 +1,26 @@
+# Popup Zone Rules
+
+## Purpose
+Extension popup UI - quick access shell that can load feature components.
+
+## Key Files
+- `popup.html` - Popup HTML structure
+- `popup.ts` - Popup logic
+- `popup.css` - Popup styles
+
+## Patterns
+- Keep popup simple - link to options page for full settings
+- Load feature popup components conditionally if needed
+- Use i18n for all strings
+- Initialize settings manager on load
+
+## Common Tasks
+- Display quick status/links
+- Load feature-specific popup components
+- Handle popup-specific interactions
+
+## What NOT to Do
+- Don't put all settings in popup (use options page)
+- Don't make popup too complex
+- Don't forget to handle popup close/reopen
+

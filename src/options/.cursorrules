@@ -1,0 +1,32 @@
+# Options Zone Rules
+
+## Purpose
+Settings page that automatically renders all feature settings from schemas.
+
+## Key Files
+- `options.html` - Options page structure
+- `options.ts` - Main options logic
+- `options.css` - Options page styles
+- `components/` - Reusable setting components
+
+## Patterns
+- Automatically load all features and render their settings schemas
+- Use `renderFeatureSettings()` from shared utils
+- Settings are rendered declaratively from feature schemas
+- Search/filter functionality for finding settings
+
+## Common Tasks
+- Load all features to get their schemas
+- Render settings using `renderFeatureSettings()`
+- Handle search/filter
+- Real-time updates when settings change
+
+## What NOT to Do
+- Don't manually create settings UI - use schemas
+- Don't hardcode feature settings
+- Don't forget to handle settings validation
+
+## References
+- See `src/shared/utils/settings-renderer.ts` for rendering utilities
+- See `src/shared/types/settings-ui.ts` for schema types
+

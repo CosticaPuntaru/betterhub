@@ -1,0 +1,13 @@
+{
+  "en": {
+    "translation": {
+      "popup.title": "BetterHub",
+      "popup.openSettings": "Open Settings",
+      "options.title": "BetterHub Settings",
+      "options.search": "Search settings...",
+      "feature.prList.name": "PR List Customization",
+      "feature.prList.description": "Customize which elements are shown on pull request listing pages"
+    }
+  }
+}
+

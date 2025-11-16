@@ -1,0 +1,28 @@
+# Content Script Zone Rules
+
+## Purpose
+Content scripts that modify GitHub UI - dynamically loaded based on enabled features.
+
+## Key Files
+- `github.ts` - Main orchestrator that loads enabled features
+
+## Patterns
+- Features are loaded dynamically via `import()` based on settings
+- Use MutationObserver for dynamically loaded GitHub content
+- Subscribe to settings changes for real-time updates
+- Check `window.location.pathname` to determine which page you're on
+
+## Common Tasks
+- Load feature modules conditionally
+- Apply/remove UI modifications based on settings
+- Handle GitHub's dynamic content loading
+
+## What NOT to Do
+- Don't modify GitHub's core functionality (only UI)
+- Don't block GitHub's scripts
+- Don't use inline styles if avoidable (use CSS classes)
+
+## References
+- See `src/shared/utils/settings-manager.ts` for settings access
+- See feature `content.ts` files for examples
+
