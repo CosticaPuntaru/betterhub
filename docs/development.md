@@ -1,5 +1,9 @@
 # Development Guide
 
+> **See also:** [Documentation Index](./README.md) | [Architecture](./architecture.md)
+
+This guide covers the development workflow, setup, and best practices.
+
 ## Setup
 
 1. Install dependencies: `pnpm install`

@@ -5,8 +5,8 @@
 import type { SettingField, FeatureSettingsSchema } from '../types/settings-ui';
 import { settingsManager } from './settings-manager';
 import type { Settings } from '../types/settings';
-import { renderAliasList } from '../../features/aliasing/ui-manager';
-import { renderHarvestWhitelist } from '../../features/aliasing/harvest-whitelist-manager';
+// Note: alias-list and harvest-whitelist should use React components (AliasList, HarvestWhitelist)
+// instead of this vanilla DOM renderer. This file is kept for legacy support only.
 
 /**
  * Get nested value from settings object using dot notation key
@@ -156,64 +156,14 @@ export async function renderSettingField(
       input = textInput;
       break;
     }
-        case 'alias-list': {
-          // Extract alias type from field key (e.g., 'aliasing.users' -> 'user')
-          const keyParts = field.key.split('.');
-          if (keyParts.length < 2) {
-            throw new Error(`Invalid alias-list key: ${field.key}`);
-          }
-          const lastPart = keyParts[keyParts.length - 1];
-          // Remove trailing 's' to get singular form (users -> user, projects -> project, orgs -> org)
-          const aliasType = lastPart.endsWith('s') ? lastPart.slice(0, -1) : lastPart;
-          if (aliasType !== 'user' && aliasType !== 'project' && aliasType !== 'org') {
-            throw new Error(`Invalid alias type: ${aliasType} (from key: ${field.key})`);
-          }
-          
-          // Append label to field container
-          fieldContainer.appendChild(label);
-          
-          // Create container for alias list
-          const aliasContainer = document.createElement('div');
-          aliasContainer.className = 'alias-list-field-container';
-          
-          // Render alias list
-          await renderAliasList(aliasContainer, aliasType, field.key);
-          
-          // Append alias container to field container
-          fieldContainer.appendChild(aliasContainer);
-          container.appendChild(fieldContainer);
-          return; // Early return, no input element needed
-        }
+        case 'alias-list':
         case 'harvest-whitelist': {
-          // Extract whitelist type from field key (e.g., 'aliasing.harvestOrgWhitelist' -> 'org')
-          const keyParts = field.key.split('.');
-          if (keyParts.length < 2) {
-            throw new Error(`Invalid harvest-whitelist key: ${field.key}`);
-          }
-          const lastPart = keyParts[keyParts.length - 1];
-          let whitelistType: 'org' | 'repo';
-          if (lastPart.includes('Org')) {
-            whitelistType = 'org';
-          } else if (lastPart.includes('Repo')) {
-            whitelistType = 'repo';
-          } else {
-            throw new Error(`Invalid harvest whitelist type: ${lastPart} (from key: ${field.key})`);
-          }
-          
-          // Append label to field container
-          fieldContainer.appendChild(label);
-          
-          // Create container for whitelist
-          const whitelistContainer = document.createElement('div');
-          whitelistContainer.className = 'harvest-whitelist-field-container';
-          
-          // Render whitelist
-          await renderHarvestWhitelist(whitelistContainer, whitelistType, field.key);
-          
-          // Append whitelist container to field container
-          fieldContainer.appendChild(whitelistContainer);
-          container.appendChild(fieldContainer);
-          return; // Early return, no input element needed
+          // These field types should use React components (AliasList, HarvestWhitelist)
+          // in FeatureSettings.tsx instead of this vanilla DOM renderer
+          throw new Error(
+            `${field.type} fields must be rendered using React components. ` +
+            `Use <AliasList> or <HarvestWhitelist> in FeatureSettings.tsx instead.`
+          );
         }
     default:
       throw new Error(`Unsupported field type: ${field.type}`);

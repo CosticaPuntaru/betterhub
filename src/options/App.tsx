@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
+import { I18nextProvider, useTranslation, Trans } from 'react-i18next';
 import { useSettingsStore } from './store/settings-store';
 import { featureRegistry } from '../shared/utils/feature-registry';
-import { initI18n } from '../shared/utils/i18n';
+import { initI18n, i18n, setLanguage } from '../shared/utils/i18n';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
-import { Switch } from './components/ui/switch';
-import { Label } from './components/ui/label';
+import { Card, CardContent } from './components/ui/card';
+import { Select } from './components/ui/select';
 import { FeatureSettings } from './components/FeatureSettings';
 import { GlobalMasterToggle } from './components/GlobalMasterToggle';
-import { Search, Download, Upload, RotateCcw } from 'lucide-react';
+import { Search, Download, Upload, RotateCcw, Moon, Sun, Languages } from 'lucide-react';
 
 // Load translations
 const translations = {
@@ -17,11 +17,66 @@ const translations = {
     translation: {
       'options.title': 'BetterHub Settings',
       'options.search': 'Search settings...',
+      'options.export': 'Export Settings',
+      'options.import': 'Import Settings',
+      'options.reset': 'Reset All',
+      'options.enableBetterHub': 'Enable BetterHub',
+      'options.enableBetterHubDesc': 'Turn on/off all BetterHub features',
+      'options.enableBetterHubWithDesc': '<0>Enable BetterHub</0><1>, Turn on/off all BetterHub features</1>',
+      'options.noSearchResults': 'No settings match your search.',
+      'options.noFeatures': 'No features with settings available.',
+      'options.enableOnPages': 'Enable on Pages',
+    },
+  },
+  es: {
+    translation: {
+      'options.title': 'Configuración de BetterHub',
+      'options.search': 'Buscar configuración...',
+      'options.export': 'Exportar Configuración',
+      'options.import': 'Importar Configuración',
+      'options.reset': 'Restablecer Todo',
+      'options.enableBetterHub': 'Habilitar BetterHub',
+      'options.enableBetterHubDesc': 'Activar/desactivar todas las funciones de BetterHub',
+      'options.enableBetterHubWithDesc': '<0>Habilitar BetterHub</0><1>, Activar/desactivar todas las funciones de BetterHub</1>',
+      'options.noSearchResults': 'No hay configuraciones que coincidan con tu búsqueda.',
+      'options.noFeatures': 'No hay funciones con configuración disponible.',
+      'options.enableOnPages': 'Habilitar en Páginas',
+    },
+  },
+  fr: {
+    translation: {
+      'options.title': 'Paramètres BetterHub',
+      'options.search': 'Rechercher les paramètres...',
+      'options.export': 'Exporter les Paramètres',
+      'options.import': 'Importer les Paramètres',
+      'options.reset': 'Tout Réinitialiser',
+      'options.enableBetterHub': 'Activer BetterHub',
+      'options.enableBetterHubDesc': 'Activer/désactiver toutes les fonctionnalités BetterHub',
+      'options.enableBetterHubWithDesc': '<0>Activer BetterHub</0><1>, Activer/désactiver toutes les fonctionnalités BetterHub</1>',
+      'options.noSearchResults': 'Aucun paramètre ne correspond à votre recherche.',
+      'options.noFeatures': 'Aucune fonctionnalité avec paramètres disponible.',
+      'options.enableOnPages': 'Activer sur les Pages',
+    },
+  },
+  de: {
+    translation: {
+      'options.title': 'BetterHub Einstellungen',
+      'options.search': 'Einstellungen suchen...',
+      'options.export': 'Einstellungen Exportieren',
+      'options.import': 'Einstellungen Importieren',
+      'options.reset': 'Alles Zurücksetzen',
+      'options.enableBetterHub': 'BetterHub Aktivieren',
+      'options.enableBetterHubDesc': 'Alle BetterHub-Funktionen ein/ausschalten',
+      'options.enableBetterHubWithDesc': '<0>BetterHub Aktivieren</0><1>, Alle BetterHub-Funktionen ein/ausschalten</1>',
+      'options.noSearchResults': 'Keine Einstellungen entsprechen Ihrer Suche.',
+      'options.noFeatures': 'Keine Funktionen mit Einstellungen verfügbar.',
+      'options.enableOnPages': 'Auf Seiten Aktivieren',
     },
   },
 };
 
-export function App() {
+function AppContent() {
+  const { t } = useTranslation();
   const [initialized, setInitialized] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [features, setFeatures] = useState<Array<{ id: string; settingsSchema: any }>>([]);
@@ -30,9 +85,6 @@ export function App() {
 
   useEffect(() => {
     async function init() {
-      // Initialize i18n
-      await initI18n(translations);
-
       // Initialize Zustand store (will sync with extension if available)
       await initialize();
 
@@ -40,7 +92,10 @@ export function App() {
       await loadAllFeatures();
 
       // Get features with settings
-      const featuresWithSettings = featureRegistry.getWithSettings();
+      const featuresWithSettings = featureRegistry.getWithSettings().filter(f => f.settingsSchema).map(f => ({
+        id: f.id,
+        settingsSchema: f.settingsSchema!,
+      }));
       setFeatures(featuresWithSettings);
 
       setInitialized(true);
@@ -58,6 +113,17 @@ export function App() {
     init().catch(console.error);
   }, [initialize]);
 
+  // Apply theme to document
+  useEffect(() => {
+    const theme = settings.theme || 'light';
+    const html = document.documentElement;
+    if (theme === 'dark') {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+  }, [settings.theme]);
+
   async function loadAllFeatures() {
     try {
       await import('../features/pr-list-customization/index');
@@ -74,7 +140,7 @@ export function App() {
     const match = hash.match(/^#alias-(user|project|org)-(.+)$/);
     if (!match) return;
 
-    const [, itemType, encodedOriginal] = match;
+    const [, , encodedOriginal] = match;
     const original = decodeURIComponent(encodedOriginal);
 
     const scrollAndHighlight = () => {
@@ -109,7 +175,7 @@ export function App() {
     }
   }
 
-  function showNotification(message: string, type: 'success' | 'error') {
+  function showNotification(message: string, _type: 'success' | 'error') {
     // Simple notification - can be enhanced with a toast component later
     alert(message);
   }
@@ -214,11 +280,43 @@ export function App() {
       <div className="container mx-auto p-6 max-w-6xl">
         <header className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold">BetterHub Settings</h1>
-            <div className="flex gap-2">
+            <h1 className="text-3xl font-bold">{t('options.title')}</h1>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <Languages className="h-4 w-4 text-muted-foreground" />
+                <Select
+                  value={settings.language || 'en'}
+                  onChange={(e) => {
+                    const newLang = e.target.value;
+                    updateSettings({ language: newLang });
+                    setLanguage(newLang);
+                  }}
+                  className="h-9 w-32"
+                >
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                </Select>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  const newTheme = settings.theme === 'dark' ? 'light' : 'dark';
+                  updateSettings({ theme: newTheme });
+                }}
+                title={settings.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {settings.theme === 'dark' ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
               <Button variant="outline" onClick={handleExport}>
                 <Download className="h-4 w-4" />
-                Export Settings
+                {t('options.export')}
               </Button>
               <Button variant="outline" onClick={() => {
                 const input = document.createElement('input');
@@ -233,11 +331,11 @@ export function App() {
                 input.click();
               }}>
                 <Upload className="h-4 w-4" />
-                Import Settings
+                {t('options.import')}
               </Button>
               <Button variant="destructive" onClick={handleReset}>
                 <RotateCcw className="h-4 w-4" />
-                Reset All
+                {t('options.reset')}
               </Button>
             </div>
           </div>
@@ -245,7 +343,7 @@ export function App() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search settings..."
+              placeholder={t('options.search')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -263,7 +361,11 @@ export function App() {
             <Card>
               <CardContent className="pt-6">
                 <p className="text-muted-foreground">
-                  {searchQuery ? 'No settings match your search.' : 'No features with settings available.'}
+                  {searchQuery ? (
+                    <Trans i18nKey="options.noSearchResults" />
+                  ) : (
+                    <Trans i18nKey="options.noFeatures" />
+                  )}
                 </p>
               </CardContent>
             </Card>
@@ -280,5 +382,31 @@ export function App() {
         </main>
       </div>
     </div>
+  );
+}
+
+export function App() {
+  const [i18nReady, setI18nReady] = useState(false);
+
+  useEffect(() => {
+    async function init() {
+      await initI18n(translations);
+      setI18nReady(true);
+    }
+    init().catch(console.error);
+  }, []);
+
+  if (!i18nReady || !i18n) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <I18nextProvider i18n={i18n}>
+      <AppContent />
+    </I18nextProvider>
   );
 }

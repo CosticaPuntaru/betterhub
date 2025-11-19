@@ -1,5 +1,9 @@
 # Settings System
 
+> **See also:** [Documentation Index](./README.md) | [Settings Manager API](../src/shared/utils/settings-manager.md)
+
+This document describes the settings system architecture.
+
 ## Overview
 
 Centralized settings management with real-time synchronization across all extension contexts.

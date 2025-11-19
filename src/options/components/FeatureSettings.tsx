@@ -1,13 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Select } from './ui/select';
 import { useSettingsStore } from '../store/settings-store';
-import { renderAliasList } from '../../features/aliasing/ui-manager';
-import { renderHarvestWhitelist } from '../../features/aliasing/harvest-whitelist-manager';
+import { AliasList } from './AliasList';
+import { HarvestWhitelist } from './HarvestWhitelist';
 import type { FeatureSettingsSchema, SettingField } from '../../shared/types/settings-ui';
 import { cn } from '../lib/utils';
 
@@ -32,10 +33,9 @@ function getNestedValue(obj: any, key: string): unknown {
 }
 
 export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSettingsProps) {
+  const { t } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
   const [pageToggles, setPageToggles] = useState<Record<string, boolean>>({});
-  const aliasListRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-  const whitelistRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const featureEnabled = settings.features?.[featureId] ?? true;
 
@@ -55,46 +55,6 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
     }
   }, [settings, featureId, schema]);
 
-  // Render alias lists and whitelists
-  useEffect(() => {
-    async function renderCustomFields() {
-      for (const field of schema.fields) {
-        if (field.type === 'alias-list') {
-          const keyParts = field.key.split('.');
-          if (keyParts.length < 2) continue;
-          const lastPart = keyParts[keyParts.length - 1];
-          const aliasType = lastPart.endsWith('s') ? lastPart.slice(0, -1) : lastPart;
-          if (aliasType !== 'user' && aliasType !== 'project' && aliasType !== 'org') continue;
-
-          const container = aliasListRefs.current.get(field.key);
-          if (container) {
-            container.innerHTML = '';
-            await renderAliasList(container, aliasType as 'user' | 'project' | 'org', field.key);
-          }
-        } else if (field.type === 'harvest-whitelist') {
-          const keyParts = field.key.split('.');
-          if (keyParts.length < 2) continue;
-          const lastPart = keyParts[keyParts.length - 1];
-          let whitelistType: 'org' | 'repo';
-          if (lastPart.includes('Org')) {
-            whitelistType = 'org';
-          } else if (lastPart.includes('Repo')) {
-            whitelistType = 'repo';
-          } else {
-            continue;
-          }
-
-          const container = whitelistRefs.current.get(field.key);
-          if (container) {
-            container.innerHTML = '';
-            await renderHarvestWhitelist(container, whitelistType, field.key);
-          }
-        }
-      }
-    }
-
-    renderCustomFields();
-  }, [schema, settings]);
 
   async function handleFeatureToggle(enabled: boolean) {
     updateSettings({
@@ -154,33 +114,27 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
   return (
     <Card data-feature-id={featureId} className={cn('feature-settings-section')}>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle>{schema.displayName}</CardTitle>
-            {schema.description && (
-              <CardDescription>{schema.description}</CardDescription>
-            )}
-          </div>
+        <label className="flex items-center gap-3 cursor-pointer">
           <Switch
             checked={featureEnabled}
             onChange={(e) => handleFeatureToggle(e.target.checked)}
             disabled={!globalEnabled}
           />
-        </div>
+          <div className="flex items-center gap-2">
+            <CardTitle className="mb-0">{schema.displayName}</CardTitle>
+            {schema.description && (
+              <span className="text-sm text-muted-foreground">, {schema.description}</span>
+            )}
+          </div>
+        </label>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         {schema.pages && schema.pages.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Enable on Pages</h3>
-            <div className="space-y-3">
+          <div className="space-y-2">
+            <h3 className="text-base font-semibold">{t('options.enableOnPages')}</h3>
+            <div className="space-y-1.5">
               {schema.pages.map((page) => (
-                <div key={page.pageId} className="flex items-center justify-between">
-                  <div>
-                    <Label>{page.label}</Label>
-                    {page.description && (
-                      <p className="text-sm text-muted-foreground">{page.description}</p>
-                    )}
-                  </div>
+                <label key={page.pageId} className="flex items-center gap-3 cursor-pointer">
                   <Switch
                     checked={pageToggles[page.pageId] ?? true}
                     disabled={isDisabled}
@@ -190,43 +144,65 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                       handlePageToggle(page.pageId, enabled);
                     }}
                   />
-                </div>
+                  <span className="text-sm font-normal">
+                    {page.label}
+                    {page.description && (
+                      <span className="text-muted-foreground">, {page.description}</span>
+                    )}
+                  </span>
+                </label>
               ))}
             </div>
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {schema.fields.map((field) => {
             if (field.type === 'alias-list') {
+              const keyParts = field.key.split('.');
+              if (keyParts.length < 2) return null;
+              const lastPart = keyParts[keyParts.length - 1];
+              const aliasType = lastPart.endsWith('s') ? lastPart.slice(0, -1) : lastPart;
+              if (aliasType !== 'user' && aliasType !== 'project' && aliasType !== 'org') return null;
+
               return (
                 <div key={field.key} className="space-y-2">
                   <Label>{field.label}</Label>
                   {field.description && (
                     <p className="text-sm text-muted-foreground">{field.description}</p>
                   )}
-                  <div
-                    ref={(el) => {
-                      if (el) aliasListRefs.current.set(field.key, el);
-                    }}
-                    className="alias-list-field-container"
+                  <AliasList
+                    aliasType={aliasType as 'user' | 'project' | 'org'}
+                    settingKey={field.key}
+                    disabled={isDisabled}
                   />
                 </div>
               );
             }
 
             if (field.type === 'harvest-whitelist') {
+              const keyParts = field.key.split('.');
+              if (keyParts.length < 2) return null;
+              const lastPart = keyParts[keyParts.length - 1];
+              let whitelistType: 'org' | 'repo';
+              if (lastPart.includes('Org')) {
+                whitelistType = 'org';
+              } else if (lastPart.includes('Repo')) {
+                whitelistType = 'repo';
+              } else {
+                return null;
+              }
+
               return (
                 <div key={field.key} className="space-y-2">
                   <Label>{field.label}</Label>
                   {field.description && (
                     <p className="text-sm text-muted-foreground">{field.description}</p>
                   )}
-                  <div
-                    ref={(el) => {
-                      if (el) whitelistRefs.current.set(field.key, el);
-                    }}
-                    className="harvest-whitelist-field-container"
+                  <HarvestWhitelist
+                    whitelistType={whitelistType}
+                    settingKey={field.key}
+                    disabled={isDisabled}
                   />
                 </div>
               );
@@ -235,21 +211,30 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
             const value = getNestedValue(settings, field.key) ?? field.default;
 
             return (
-              <div key={field.key} className="space-y-2">
-                <Label>{field.label}</Label>
-                {field.description && (
-                  <p className="text-sm text-muted-foreground">{field.description}</p>
-                )}
-                {field.type === 'checkbox' && (
-                  <div className="flex items-center space-x-2">
+              <div key={field.key} className={field.type === 'checkbox' ? 'flex items-center gap-3' : 'space-y-2'}>
+                {field.type === 'checkbox' ? (
+                  <label className="flex items-center gap-3 cursor-pointer">
                     <Switch
                       checked={Boolean(value)}
                       onChange={(e) => handleFieldChange(field, e.target.checked)}
                       disabled={isDisabled}
                     />
-                  </div>
+                    <span className="text-sm font-normal">
+                      {field.label}
+                      {field.description && (
+                        <span className="text-muted-foreground">, {field.description}</span>
+                      )}
+                    </span>
+                  </label>
+                ) : (
+                  <>
+                    <Label>{field.label}</Label>
+                    {field.description && (
+                      <p className="text-sm text-muted-foreground">{field.description}</p>
+                    )}
+                  </>
                 )}
-                {field.type === 'text' && (
+                {field.type !== 'checkbox' && field.type === 'text' && (
                   <Input
                     type="text"
                     value={String(value ?? '')}
@@ -258,7 +243,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                     disabled={isDisabled}
                   />
                 )}
-                {field.type === 'textarea' && (
+                {field.type !== 'checkbox' && field.type === 'textarea' && (
                   <Textarea
                     value={String(value ?? '')}
                     onChange={(e) => handleFieldChange(field, e.target.value)}
@@ -266,7 +251,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                     disabled={isDisabled}
                   />
                 )}
-                {field.type === 'number' && (
+                {field.type !== 'checkbox' && field.type === 'number' && (
                   <Input
                     type="number"
                     value={String(value ?? field.default ?? '')}
@@ -277,7 +262,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                     disabled={isDisabled}
                   />
                 )}
-                {field.type === 'select' && (
+                {field.type !== 'checkbox' && field.type === 'select' && (
                   <Select
                     value={String(value ?? '')}
                     onChange={(e) => handleFieldChange(field, e.target.value)}

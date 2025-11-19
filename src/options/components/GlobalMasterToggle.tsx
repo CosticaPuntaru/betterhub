@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Trans } from 'react-i18next';
+import { Card, CardHeader, CardTitle } from './ui/card';
 import { Switch } from './ui/switch';
-import { Label } from './ui/label';
 
 interface GlobalMasterToggleProps {
   enabled: boolean;
@@ -11,13 +11,15 @@ export function GlobalMasterToggle({ enabled, onToggle }: GlobalMasterToggleProp
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle>Enable BetterHub</CardTitle>
-            <CardDescription>Turn on/off all BetterHub features</CardDescription>
-          </div>
+        <label className="flex items-center gap-3 cursor-pointer">
           <Switch checked={enabled} onChange={(e) => onToggle(e.target.checked)} />
-        </div>
+          <div className="flex items-center gap-2">
+            <Trans i18nKey="options.enableBetterHubWithDesc">
+              <CardTitle className="mb-0">Enable BetterHub</CardTitle>
+              <span className="text-sm text-muted-foreground">, Turn on/off all BetterHub features</span>
+            </Trans>
+          </div>
+        </label>
       </CardHeader>
     </Card>
   );

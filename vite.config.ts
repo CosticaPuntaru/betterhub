@@ -22,6 +22,11 @@ export default defineConfig({
       '@/shared': resolve(__dirname, './src/shared'),
       '@/features': resolve(__dirname, './src/features'),
     },
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    exclude: [],
   },
   build: {
     outDir: 'dist',
@@ -31,6 +36,18 @@ export default defineConfig({
         popup: resolve(__dirname, 'src/popup/popup.html'),
         options: resolve(__dirname, 'src/options/options.html'),
         standalone: resolve(__dirname, 'debug/index.html'),
+      },
+      output: {
+        manualChunks: (id) => {
+          // Bundle React and React-DOM together to avoid duplicate instances
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'react-vendor';
+          }
+          // Bundle other vendor dependencies
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
       },
     },
   },

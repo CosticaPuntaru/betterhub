@@ -8,6 +8,7 @@ import type { AliasingSettings } from '../../features/aliasing/types';
 export interface Settings {
   // Global settings
   language: string;
+  theme: 'light' | 'dark';
   enabled: boolean; // Master toggle for entire extension
   
   // Feature enable/disable toggles
@@ -52,6 +53,7 @@ export interface PRListSettings {
 
 export const DEFAULT_SETTINGS: Settings = {
   language: 'en',
+  theme: 'light',
   enabled: true, // Extension enabled by default
   features: {
     'pr-list-customization': true,

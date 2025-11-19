@@ -1,5 +1,9 @@
 # Architecture
 
+> **See also:** [Documentation Index](./README.md) | [Features Guide](./features.md)
+
+This document describes the system architecture and design patterns used in BetterHub.
+
 ## Overview
 
 BetterHub uses a feature-based architecture where each feature is self-contained and can span multiple contexts (content, popup, options).

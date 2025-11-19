@@ -1,5 +1,9 @@
 # Features Guide
 
+> **See also:** [Documentation Index](./README.md) | [Architecture](./architecture.md)
+
+This guide explains how to develop features for BetterHub.
+
 ## Adding a New Feature
 
 1. Create feature directory: `src/features/feature-name/`

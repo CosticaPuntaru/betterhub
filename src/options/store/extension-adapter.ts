@@ -50,14 +50,13 @@ export async function initializeExtensionAdapter(): Promise<void> {
 
     // Subscribe to Zustand store changes and sync to extension
     let isSyncing = false;
-    let storeUnsubscribe: (() => void) | null = null;
     
     // Set initialized flag before subscribing to avoid race conditions
     isInitialized = true;
     
-    storeUnsubscribe = useSettingsStore.subscribe(
-      (state) => state.settings,
-      (settings) => {
+    useSettingsStore.subscribe(
+      (state: { settings: Settings }) => state.settings,
+      (settings: Settings) => {
         // Only sync if we're not already syncing (avoid loops)
         if (!isInitialized || isSyncing) return;
         
@@ -74,22 +73,6 @@ export async function initializeExtensionAdapter(): Promise<void> {
       }
     );
     console.log('[Extension Adapter] Initialized successfully');
-
-    // Store unsubscribe for cleanup
-    if (storeUnsubscribe) {
-      // Return cleanup function
-      return () => {
-        if (unsubscribeManager) {
-          unsubscribeManager();
-          unsubscribeManager = null;
-        }
-        if (storeUnsubscribe) {
-          storeUnsubscribe();
-          storeUnsubscribe = null;
-        }
-        isInitialized = false;
-      };
-    }
   } catch (error) {
     console.error('[Extension Adapter] Initialization failed:', error);
     throw error;

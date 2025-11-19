@@ -17,21 +17,83 @@
   color: #24292e;
 }
 
-.alias-list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.alias-list-table-container {
   margin-bottom: 15px;
+  overflow-x: auto;
 }
 
-.alias-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  background-color: #fff;
+.alias-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
   border: 1px solid #e1e4e8;
-  border-radius: 4px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.alias-list-table thead {
+  background-color: #f6f8fa;
+}
+
+.alias-list-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #24292e;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.alias-th-enabled {
+  width: 80px;
+}
+
+.alias-th-original {
+  width: 150px;
+}
+
+.alias-th-alias {
+  width: 150px;
+}
+
+.alias-th-display {
+  width: 120px;
+}
+
+.alias-th-color-icon {
+  width: auto;
+  min-width: 200px;
+}
+
+.alias-th-actions {
+  width: 100px;
+  text-align: right;
+}
+
+.alias-list-tbody tr {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.alias-list-tbody tr:last-child {
+  border-bottom: none;
+}
+
+.alias-list-tbody tr:hover {
+  background-color: #f6f8fa;
+}
+
+.alias-td-enabled,
+.alias-td-original,
+.alias-td-alias,
+.alias-td-display,
+.alias-td-color-icon,
+.alias-td-actions {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.alias-td-actions {
+  text-align: right;
 }
 
 .alias-enabled-label {
@@ -64,18 +126,17 @@
   color: #24292e;
 }
 
-.alias-input,
-.alias-icon-input {
+.alias-input {
   padding: 6px 8px;
-  font-size: 14px;
+  font-size: 13px;
   border: 1px solid #d1d5da;
-  border-radius: 3px;
+  border-radius: 4px;
   width: 100%;
-  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .alias-input:focus,
-.alias-icon-input:focus {
+.alias-icon-url-input:focus {
   outline: none;
   border-color: #0366d6;
   box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
@@ -83,20 +144,27 @@
 
 .alias-display-type-select {
   padding: 6px 8px;
-  font-size: 14px;
+  font-size: 13px;
   border: 1px solid #d1d5da;
-  border-radius: 3px;
+  border-radius: 4px;
   background-color: #fff;
   cursor: pointer;
-  max-width: 200px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.alias-display-type-select:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
 }
 
 .alias-color-input {
-  width: 60px;
-  height: 32px;
+  width: 50px;
+  height: 28px;
   padding: 2px;
   border: 1px solid #d1d5da;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -112,25 +180,46 @@
 }
 
 .alias-add-button {
+  padding: 6px 16px;
   background-color: #28a745;
   color: #fff;
-  border-color: #28a745;
+  border: 1px solid #28a745;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .alias-add-button:hover {
   background-color: #22863a;
+  border-color: #22863a;
+}
+
+.alias-add-button:active {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
 }
 
 .alias-delete-button {
+  padding: 6px 12px;
   background-color: #dc3545;
   color: #fff;
-  border-color: #dc3545;
-  margin-top: 8px;
-  align-self: flex-start;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .alias-delete-button:hover {
   background-color: #c82333;
+  border-color: #c82333;
+}
+
+.alias-delete-button:active {
+  background-color: #bd2130;
+  border-color: #bd2130;
 }
 
 .alias-list-field-container {
@@ -231,39 +320,89 @@
   font-weight: 500;
 }
 
-.harvest-whitelist-container {
+.harvest-whitelist-table-container {
   margin: 12px 0;
+  overflow-x: auto;
 }
 
-.harvest-whitelist-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  margin-bottom: 8px;
+.harvest-whitelist-table {
+  width: 100%;
+  border-collapse: collapse;
   background-color: #ffffff;
   border: 1px solid #e1e4e8;
-  border-radius: 4px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.harvest-whitelist-table thead {
+  background-color: #f6f8fa;
+}
+
+.harvest-whitelist-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #24292e;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.harvest-whitelist-th-name {
+  width: auto;
+}
+
+.harvest-whitelist-th-actions {
+  width: 120px;
+  text-align: right;
+}
+
+.harvest-whitelist-tbody tr {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.harvest-whitelist-tbody tr:last-child {
+  border-bottom: none;
+}
+
+.harvest-whitelist-tbody tr:hover {
+  background-color: #f6f8fa;
+}
+
+.harvest-whitelist-td-name {
+  padding: 10px 12px;
 }
 
 .harvest-whitelist-item-text {
-  flex: 1;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.9em;
+  font-size: 13px;
+  color: #24292e;
+}
+
+.harvest-whitelist-td-actions {
+  padding: 10px 12px;
+  text-align: right;
 }
 
 .harvest-whitelist-delete-btn {
-  padding: 4px 12px;
+  padding: 6px 12px;
   background-color: #dc3545;
   color: #ffffff;
-  border: none;
+  border: 1px solid #dc3545;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85em;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .harvest-whitelist-delete-btn:hover {
   background-color: #c82333;
+  border-color: #c82333;
+}
+
+.harvest-whitelist-delete-btn:active {
+  background-color: #bd2130;
+  border-color: #bd2130;
 }
 
 .harvest-whitelist-add-form {
@@ -298,10 +437,16 @@
   color: #ffffff;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .harvest-whitelist-add-btn:hover {
   background-color: #22863a;
   border-color: #22863a;
+}
+
+.harvest-whitelist-add-btn:active {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
 }
 

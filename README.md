@@ -53,12 +53,25 @@ pnpm dev
 
 ## Documentation
 
-See the `docs/` directory for detailed documentation:
-- [Architecture](./docs/architecture.md)
-- [Features Guide](./docs/features.md)
-- [Settings System](./docs/settings.md)
-- [i18n Guide](./docs/i18n.md)
-- [Development Guide](./docs/development.md)
+Documentation is organized by component, with each document located close to the code it describes.
+
+**Start here:** [Documentation Index](./docs/README.md)
+
+### Quick Links
+- [Architecture](./docs/architecture.md) - System architecture and design
+- [Features Guide](./docs/features.md) - Feature development guide
+- [Settings System](./docs/settings.md) - Settings architecture
+- [Development Guide](./docs/development.md) - Development workflow
+- [i18n Guide](./docs/i18n.md) - Internationalization
+
+### Feature Documentation
+- [Aliasing Feature](./src/features/aliasing/README.md) - User/project/org aliasing
+- [PR List Customization](./src/features/pr-list-customization/README.md) - PR list UI customization
+
+### Component Documentation
+- [Options Page](./src/options/README.md) - Settings page architecture
+- [Options Components](./src/options/components/README.md) - React components
+- [Shared Utilities](./src/shared/README.md) - Shared code and utilities
 
 ## Project Structure
 

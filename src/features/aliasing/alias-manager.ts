@@ -4,7 +4,6 @@
 
 import type { AliasItem, AliasType } from './types';
 import { settingsManager } from '../../shared/utils/settings-manager';
-import type { Settings } from '../../shared/types/settings';
 import { generateDeterministicColor, generateAcronym, imageUrlToDataUrl } from './utils';
 import type { HarvestedItem } from './harvester';
 

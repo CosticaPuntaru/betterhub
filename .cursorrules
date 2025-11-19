@@ -30,3 +30,29 @@ BetterHub is a cross-browser Chrome extension for GitHub customization with a fe
 - See zone-specific `.cursorrules` files for detailed patterns
 - See `docs/` directory for architecture and development guides
 
+## Validation Requirements (ALWAYS APPLY)
+
+After completing any coding task, you MUST:
+
+1. **Run Lint Check**: Execute `pnpm lint` to ensure code follows ESLint rules
+   - Fix any linting errors before considering the task complete
+   - Do not skip linting even for small changes
+
+2. **Run Type Check**: Execute `pnpm type-check` to verify TypeScript types are correct
+   - Fix any type errors before considering the task complete
+   - Ensure strict TypeScript compliance (no implicit any)
+
+3. **Browser Validation**: Use the browser to validate that the task works correctly
+   - Build the extension: `pnpm build` (or use `pnpm test:browser` which builds and launches)
+   - Load the extension in Chrome/Firefox/Edge
+   - Navigate to GitHub and test the implemented feature or fix
+   - Verify the functionality works as expected in the actual browser environment
+   - Check for console errors and visual regressions
+
+**Important**: A task is NOT complete until all three validation steps pass:
+- ✅ Lint check passes
+- ✅ Type check passes  
+- ✅ Browser validation confirms functionality works
+
+If any validation fails, fix the issues before marking the task as complete.
+

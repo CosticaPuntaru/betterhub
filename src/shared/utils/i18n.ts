@@ -24,19 +24,12 @@ export async function initI18n(resources: Record<string, Record<string, unknown>
   // The i18n instance is i18next itself after initialization
   i18nInstance = i18next;
 
-  // Listen for language changes
+  // Listen for language changes from settings
   settingsManager.subscribe((updatedSettings) => {
     if (i18nInstance && updatedSettings.language) {
       i18nInstance.changeLanguage(updatedSettings.language);
     }
   });
-}
-
-export function t(key: string, params?: Record<string, unknown>): string {
-  if (!i18nInstance) {
-    return key;
-  }
-  return i18nInstance.t(key, params);
 }
 
 export function setLanguage(language: string): Promise<void> {
@@ -50,5 +43,14 @@ export function getCurrentLanguage(): string {
   return i18nInstance.language;
 }
 
+// Export t function for non-React code (e.g., popup.ts)
+export function t(key: string, params?: Record<string, unknown>): string {
+  if (!i18nInstance) {
+    return key;
+  }
+  return i18nInstance.t(key, params);
+}
+
+// Export i18n instance for react-i18next
 export { i18nInstance as i18n };
 

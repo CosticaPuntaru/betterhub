@@ -17,7 +17,7 @@ interface SettingsStore {
  * Works in both extension and standalone modes
  */
 export const useSettingsStore = create<SettingsStore>()(
-  subscribeWithSelector((set, get) => ({
+  subscribeWithSelector((set, _get) => ({
     settings: DEFAULT_SETTINGS,
     isLoading: true,
 
