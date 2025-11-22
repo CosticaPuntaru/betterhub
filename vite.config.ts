@@ -23,6 +23,8 @@ export default defineConfig({
       '@/features': resolve(__dirname, './src/features'),
     },
     dedupe: ['react', 'react-dom'],
+    // Ensure React's internal scheduler is resolved correctly
+    conditions: ['import', 'module', 'browser', 'default'],
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
@@ -31,6 +33,10 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
     rollupOptions: {
       input: {
         popup: resolve(__dirname, 'src/popup/popup.html'),
@@ -39,8 +45,15 @@ export default defineConfig({
       },
       output: {
         manualChunks: (id) => {
-          // Bundle React and React-DOM together to avoid duplicate instances
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+          // Bundle React, React-DOM, scheduler, and react-i18next together
+          // This prevents circular dependencies and ensures scheduler is available
+          if (
+            id.includes('node_modules/react/') || 
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react/jsx') ||
+            id.includes('node_modules/scheduler/') ||
+            id.includes('node_modules/react-i18next/')
+          ) {
             return 'react-vendor';
           }
           // Bundle other vendor dependencies
@@ -48,6 +61,8 @@ export default defineConfig({
             return 'vendor';
           }
         },
+        // Ensure proper chunk loading order
+        chunkFileNames: 'assets/[name]-[hash].js',
       },
     },
   },

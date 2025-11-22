@@ -1,3 +1,4 @@
+import '../src/shared/utils/chrome-mock';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from '../src/options/App';
@@ -21,4 +22,3 @@ root.render(
     <App />
   </StrictMode>
 );
-

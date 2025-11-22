@@ -67,13 +67,16 @@ export async function createSettingField(field: SettingField): Promise<HTMLEleme
       break;
     }
     case 'text':
-    case 'textarea': {
+    case 'textarea':
+    case 'color': {
       const textInput =
         field.type === 'textarea'
           ? document.createElement('textarea')
           : document.createElement('input');
       if (field.type === 'text') {
         (textInput as HTMLInputElement).type = 'text';
+      } else if (field.type === 'color') {
+        (textInput as HTMLInputElement).type = 'color';
       }
       textInput.value = String(value ?? field.default);
       if (field.placeholder) {

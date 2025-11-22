@@ -4,20 +4,23 @@
  */
 
 import type { AliasingSettings } from '../../features/aliasing/types';
+import type { ReadCommentsTrackerSettings } from '../../features/read-comments-tracker/types';
 
 export interface Settings {
   // Global settings
   language: string;
   theme: 'light' | 'dark';
   enabled: boolean; // Master toggle for entire extension
-  
+  debug: boolean; // Debug mode toggle
+
   // Feature enable/disable toggles
   features: FeatureToggles;
-  
+
   // Feature-specific settings
   prList?: PRListSettings;
   aliasing?: AliasingSettings;
-  
+  readCommentsTracker?: ReadCommentsTrackerSettings;
+
   // Add more feature settings here as they are added
   [key: string]: unknown;
 }
@@ -26,6 +29,7 @@ export interface FeatureToggles {
   // Master toggle for each feature
   'pr-list-customization': boolean;
   'aliasing': boolean;
+  'read-comments-tracker': boolean;
   // Add more feature toggles here as features are added
   [featureId: string]: boolean;
 }
@@ -55,9 +59,11 @@ export const DEFAULT_SETTINGS: Settings = {
   language: 'en',
   theme: 'light',
   enabled: true, // Extension enabled by default
+  debug: false,
   features: {
     'pr-list-customization': true,
     'aliasing': true,
+    'read-comments-tracker': true,
   },
   prList: {
     enabledOnPages: {
@@ -86,6 +92,10 @@ export const DEFAULT_SETTINGS: Settings = {
     autoAliasUsers: false,
     autoAliasProjects: false,
     autoAliasOrgs: false,
+  },
+  readCommentsTracker: {
+    readColor: '#2da44e', // Green
+    unreadColor: '#bc8c00', // Orange
   },
 };
 

@@ -11,7 +11,8 @@ export type SettingFieldType =
   | 'textarea'
   | 'radio'
   | 'alias-list'
-  | 'harvest-whitelist';
+  | 'harvest-whitelist'
+  | 'color';
 
 export interface SettingOption {
   value: string | number;

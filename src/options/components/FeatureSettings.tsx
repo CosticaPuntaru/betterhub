@@ -275,6 +275,24 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                     ))}
                   </Select>
                 )}
+                {field.type !== 'checkbox' && field.type === 'color' && (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="color"
+                      value={String(value ?? field.default ?? '#000000')}
+                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                      disabled={isDisabled}
+                      className="w-12 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={String(value ?? field.default ?? '')}
+                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                      disabled={isDisabled}
+                      className="flex-1"
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

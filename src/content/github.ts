@@ -26,7 +26,7 @@ async function loadFeature(featureId: string): Promise<void> {
     // Dynamic import based on feature ID
     const module = await import(`../features/${featureId}/content.ts`);
     loadedFeatures.set(featureId, module);
-    
+
     const settings = await settingsManager.getSettings();
     if (module.initialize) {
       await module.initialize(settings);
@@ -85,6 +85,11 @@ function shouldFeatureBeEnabled(
     return true;
   }
 
+  if (featureId === 'read-comments-tracker') {
+    // Works on PR list and PR details pages
+    return currentPath.includes('/pulls') || currentPath.includes('/pull/');
+  }
+
   return false;
 }
 
@@ -103,6 +108,11 @@ async function initializeFeatures(settings: Settings): Promise<void> {
   // Check aliasing feature
   if (shouldFeatureBeEnabled('aliasing', settings, currentPath)) {
     enabledFeatures.push('aliasing');
+  }
+
+  // Check read-comments-tracker feature
+  if (shouldFeatureBeEnabled('read-comments-tracker', settings, currentPath)) {
+    enabledFeatures.push('read-comments-tracker');
   }
 
   // Load all enabled features
