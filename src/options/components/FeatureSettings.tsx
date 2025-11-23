@@ -121,9 +121,9 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
             disabled={!globalEnabled}
           />
           <div className="flex items-center gap-2">
-            <CardTitle className="mb-0">{schema.displayName}</CardTitle>
+            <CardTitle className="mb-0">{t(`features.${featureId}.title`, { defaultValue: schema.displayName })}</CardTitle>
             {schema.description && (
-              <span className="text-sm text-muted-foreground">, {schema.description}</span>
+              <span className="text-sm text-muted-foreground">, {t(`features.${featureId}.description`, { defaultValue: schema.description })}</span>
             )}
           </div>
         </label>
@@ -145,9 +145,9 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                     }}
                   />
                   <span className="text-sm font-normal">
-                    {page.label}
+                    {t(`features.${featureId}.pages.${page.pageId}.label`, { defaultValue: page.label })}
                     {page.description && (
-                      <span className="text-muted-foreground">, {page.description}</span>
+                      <span className="text-muted-foreground">, {t(`features.${featureId}.pages.${page.pageId}.description`, { defaultValue: page.description })}</span>
                     )}
                   </span>
                 </label>
@@ -158,6 +158,9 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
 
         <div className="space-y-3">
           {schema.fields.map((field) => {
+            const label = t(`features.${featureId}.fields.${field.key}.label`, { defaultValue: field.label });
+            const description = field.description ? t(`features.${featureId}.fields.${field.key}.description`, { defaultValue: field.description }) : undefined;
+
             if (field.type === 'alias-list') {
               const keyParts = field.key.split('.');
               if (keyParts.length < 2) return null;
@@ -167,9 +170,9 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
 
               return (
                 <div key={field.key} className="space-y-2">
-                  <Label>{field.label}</Label>
-                  {field.description && (
-                    <p className="text-sm text-muted-foreground">{field.description}</p>
+                  <Label>{label}</Label>
+                  {description && (
+                    <p className="text-sm text-muted-foreground">{description}</p>
                   )}
                   <AliasList
                     aliasType={aliasType as 'user' | 'project' | 'org'}
@@ -195,9 +198,9 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
 
               return (
                 <div key={field.key} className="space-y-2">
-                  <Label>{field.label}</Label>
-                  {field.description && (
-                    <p className="text-sm text-muted-foreground">{field.description}</p>
+                  <Label>{label}</Label>
+                  {description && (
+                    <p className="text-sm text-muted-foreground">{description}</p>
                   )}
                   <HarvestWhitelist
                     whitelistType={whitelistType}
@@ -220,17 +223,17 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                       disabled={isDisabled}
                     />
                     <span className="text-sm font-normal">
-                      {field.label}
-                      {field.description && (
-                        <span className="text-muted-foreground">, {field.description}</span>
+                      {label}
+                      {description && (
+                        <span className="text-muted-foreground">, {description}</span>
                       )}
                     </span>
                   </label>
                 ) : (
                   <>
-                    <Label>{field.label}</Label>
-                    {field.description && (
-                      <p className="text-sm text-muted-foreground">{field.description}</p>
+                    <Label>{label}</Label>
+                    {description && (
+                      <p className="text-sm text-muted-foreground">{description}</p>
                     )}
                   </>
                 )}

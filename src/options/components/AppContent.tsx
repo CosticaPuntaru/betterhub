@@ -76,7 +76,7 @@ export function AppContent() {
     if (!initialized || isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="text-muted-foreground">Loading...</div>
+                <div className="text-muted-foreground">{t('options.loading')}</div>
             </div>
         );
     }
@@ -111,6 +111,7 @@ export function AppContent() {
                                     <option value="es">Español</option>
                                     <option value="fr">Français</option>
                                     <option value="de">Deutsch</option>
+                                    <option value="ro">Română</option>
                                 </Select>
                             </div>
                             <Button
@@ -120,7 +121,7 @@ export function AppContent() {
                                     const newTheme = settings.theme === 'dark' ? 'light' : 'dark';
                                     updateSettings({ theme: newTheme });
                                 }}
-                                title={settings.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                                title={settings.theme === 'dark' ? t('options.switchToLight') : t('options.switchToDark')}
                             >
                                 {settings.theme === 'dark' ? (
                                     <Sun className="h-5 w-5" />
@@ -149,7 +150,7 @@ export function AppContent() {
                             </Button>
                             <Button variant="destructive" onClick={handleReset}>
                                 <RotateCcw className="h-4 w-4" />
-                                {t('options.reset')}
+                                <span className="hidden sm:inline">{t('options.reset')}</span>
                             </Button>
                         </div>
                     </div>
@@ -173,7 +174,7 @@ export function AppContent() {
 
                     <div className="flex items-center justify-end">
                         <label className="flex items-center gap-2 cursor-pointer text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            <span>Debug Mode</span>
+                            <span>{t('options.debugMode')}</span>
                             <Switch
                                 checked={settings.debug ?? false}
                                 onChange={(e) => updateSettings({ debug: e.target.checked })}

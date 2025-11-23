@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '../store/settings-store';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
@@ -12,13 +13,14 @@ interface HarvestWhitelistProps {
 }
 
 export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistProps) {
+  const { t } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
   const aliasing = settings.aliasing;
   const whitelistKey = whitelistType === 'org' ? 'harvestOrgWhitelist' : 'harvestRepoWhitelist';
   const currentWhitelist = aliasing?.[whitelistKey];
   const isAllowAll = currentWhitelist === 'all';
   const list = Array.isArray(currentWhitelist) ? currentWhitelist : [];
-  
+
   const [newItem, setNewItem] = useState('');
 
   const handleAllowAllChange = useCallback((checked: boolean) => {
@@ -34,10 +36,10 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
   const handleAdd = useCallback(() => {
     if (!newItem.trim()) return;
     if (!aliasing) return;
-    
+
     const currentList = Array.isArray(aliasing[whitelistKey]) ? (aliasing[whitelistKey] as string[]) : [];
     if (currentList.some(item => item.toLowerCase() === newItem.toLowerCase())) {
-      alert(`This ${whitelistType} is already in the whitelist.`);
+      alert(t('features.aliasing.ui.alertWhitelistExists', { type: whitelistType }));
       return;
     }
 
@@ -49,7 +51,7 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
     });
 
     setNewItem('');
-  }, [newItem, aliasing, whitelistKey, whitelistType, updateSettings]);
+  }, [newItem, aliasing, whitelistKey, whitelistType, updateSettings, t]);
 
   const handleDelete = useCallback((item: string) => {
     if (!aliasing) return;
@@ -73,7 +75,7 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
           onChange={(e) => handleAllowAllChange(e.target.checked)}
           disabled={disabled}
         />
-        <Label>Allow All</Label>
+        <Label>{t('features.aliasing.ui.allowAll')}</Label>
       </div>
 
       {!isAllowAll && (
@@ -82,8 +84,8 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
             <table className="w-full border-collapse bg-card border border-border rounded-md overflow-hidden">
               <thead className="bg-muted">
                 <tr>
-                  <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border whitespace-nowrap">Name</th>
-                  <th className="px-3 py-2.5 text-right text-xs font-semibold text-foreground border-b border-border w-24 whitespace-nowrap">Actions</th>
+                  <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border whitespace-nowrap">{t('features.aliasing.ui.name')}</th>
+                  <th className="px-3 py-2.5 text-right text-xs font-semibold text-foreground border-b border-border w-24 whitespace-nowrap">{t('features.aliasing.ui.actions')}</th>
                 </tr>
               </thead>
               <tbody className="[&_tr:not(:last-child)]:border-b [&_tr:not(:last-child)]:border-border [&_tr:hover]:bg-muted/50">
@@ -99,7 +101,7 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
                         variant="destructive"
                         disabled={disabled}
                       >
-                        Delete
+                        {t('features.aliasing.ui.delete')}
                       </Button>
                     </td>
                   </tr>
@@ -117,18 +119,18 @@ export function HarvestWhitelist({ whitelistType, disabled }: HarvestWhitelistPr
           >
             <div className="flex-1 space-y-1">
               <Label className="text-sm">
-                {whitelistType === 'org' ? 'Organization name:' : 'Repository name (format: owner/repo):'}
+                {whitelistType === 'org' ? t('features.aliasing.ui.orgName') : t('features.aliasing.ui.repoName')}
               </Label>
               <Input
                 type="text"
                 value={newItem}
                 onChange={(e) => setNewItem(e.target.value)}
-                placeholder={whitelistType === 'repo' ? 'owner/repo' : 'organization-name'}
+                placeholder={whitelistType === 'repo' ? t('features.aliasing.ui.ownerRepoPlaceholder') : t('features.aliasing.ui.orgNamePlaceholder')}
                 disabled={disabled}
               />
             </div>
             <Button type="submit" disabled={disabled || !newItem.trim()}>
-              Add
+              {t('features.aliasing.ui.add')}
             </Button>
           </form>
         </>
