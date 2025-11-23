@@ -17,8 +17,8 @@ function applyHidingRules(settings: Settings): void {
   if (!settings.prList) return;
 
   const prList = settings.prList;
-  const container = document.querySelector('[data-testid="pr-list"]') || 
-                    document.querySelector('.js-navigation-container');
+  const container = document.querySelector('[data-testid="pr-list"]') ||
+    document.querySelector('.js-navigation-container');
 
   if (!container) return;
 
@@ -91,15 +91,52 @@ function applyHidingRules(settings: Settings): void {
       (el as HTMLElement).style.display = 'none';
     });
   }
+
+  // Hide PR meta info (number and author)
+  if (prList.hidePrMetaInfo) {
+    container.querySelectorAll('.opened-by').forEach((el) => {
+      // We want to hide the text but keep the timestamp if it's inside (though timestamp has its own toggle)
+      // Usually structure is: #123 opened by <a>User</a> <relative-time>...</relative-time>
+      // If we hide .opened-by, we hide everything including timestamp.
+      // If hideTimestamps is NOT enabled, we might want to keep the time.
+      // However, usually the user wants to clean up the line.
+      // Let's try to hide the container but maybe check if we need to preserve something?
+      // For now, simple approach: hide the whole meta line if requested.
+      // But wait, if they want to see "2 days ago" but not "#123 opened by...", it's tricky.
+      // Let's try to target the text nodes or specific spans if possible.
+      // GitHub structure is often mixed text nodes.
+      // A safer bet for "visual cleanup" is often hiding the whole line if the user wants.
+      // But let's look at the user request: "#278884 opened by SalerSimo".
+      // This is the `.opened-by` element.
+      (el as HTMLElement).style.visibility = 'hidden'; // Use visibility to keep layout or display:none?
+      // display:none is better for removing whitespace.
+      (el as HTMLElement).style.display = 'none';
+    });
+  }
+
+  // Hide review status text
+  if (prList.hideReviewStatusText) {
+    // "Review required" is often in a span or a link
+    container.querySelectorAll('.d-inline-block.mr-1, .text-red, .text-green, .text-gray, .color-fg-danger, .color-fg-success').forEach((el) => {
+      const text = el.textContent?.trim().toLowerCase();
+      if (text && (text.includes('review required') || text.includes('changes requested') || text.includes('approved'))) {
+        (el as HTMLElement).style.display = 'none';
+      }
+    });
+    // Also target specific classes if known
+    container.querySelectorAll('[aria-label="Review required"], [aria-label="Changes requested"], [aria-label="Approved"]').forEach((el) => {
+      (el as HTMLElement).style.display = 'none';
+    });
+  }
 }
 
 /**
  * Reset all hiding rules
  */
 function resetHidingRules(): void {
-  const container = document.querySelector('[data-testid="pr-list"]') || 
-                    document.querySelector('.js-navigation-container');
-  
+  const container = document.querySelector('[data-testid="pr-list"]') ||
+    document.querySelector('.js-navigation-container');
+
   if (!container) return;
 
   // Reset all hidden elements

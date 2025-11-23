@@ -13,5 +13,7 @@ export interface PRListCustomizationSettings {
   hideCommentCounts: boolean;
   hideTimestamps: boolean;
   hideBranchNames: boolean;
+  hidePrMetaInfo: boolean;
+  hideReviewStatusText: boolean;
 }
 

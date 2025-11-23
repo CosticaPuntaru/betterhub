@@ -90,6 +90,20 @@ const settingsSchema: FeatureSettingsSchema = {
       description: 'Hide source and target branch names',
       default: false,
     },
+    {
+      key: 'prList.hidePrMetaInfo',
+      type: 'checkbox',
+      label: 'Hide PR Meta Info',
+      description: 'Hide PR number and author line (e.g. "#123 opened by User")',
+      default: false,
+    },
+    {
+      key: 'prList.hideReviewStatusText',
+      type: 'checkbox',
+      label: 'Hide Review Status Text',
+      description: 'Hide review status text (e.g. "Review required")',
+      default: false,
+    },
   ],
 };
 
