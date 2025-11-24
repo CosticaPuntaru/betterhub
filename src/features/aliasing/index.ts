@@ -35,20 +35,6 @@ const settingsSchema: FeatureSettingsSchema = {
       default: false,
     },
     {
-      key: 'aliasing.harvestOrgWhitelist',
-      type: 'harvest-whitelist',
-      label: 'Harvest Organization Whitelist',
-      description: 'Control which organizations to harvest from',
-      default: 'all',
-    },
-    {
-      key: 'aliasing.harvestRepoWhitelist',
-      type: 'harvest-whitelist',
-      label: 'Harvest Repository Whitelist',
-      description: 'Control which repositories to harvest from',
-      default: 'all',
-    },
-    {
       key: 'aliasing.autoAliasUsers',
       type: 'checkbox',
       label: 'Auto-alias Users',

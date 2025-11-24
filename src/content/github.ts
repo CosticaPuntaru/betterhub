@@ -56,9 +56,41 @@ function shouldFeatureBeEnabled(
   currentPath: string
 ): boolean {
   // Check global extension toggle first
-  const isExtensionEnabled = settings.enabled ?? true;
-  if (!isExtensionEnabled) {
+  // Check global extension toggle first
+  const enableMode = settings.enableMode ?? (settings.enabled === false ? 'off' : 'on');
+
+  if (enableMode === 'off') {
     return false;
+  }
+
+  if (enableMode === 'allowlist') {
+    const allowlist = settings.allowlist ?? [];
+    if (allowlist.length === 0) {
+      return false;
+    }
+
+    // Parse current path to get owner and repo
+    // Format: /owner/repo/... or /owner
+    const pathParts = currentPath.split('/').filter(Boolean);
+    if (pathParts.length >= 1) {
+      const owner = pathParts[0];
+      const repo = pathParts.length >= 2 ? pathParts[1] : undefined;
+      const ownerRepo = repo ? `${owner}/${repo}` : undefined;
+
+      // Check if owner or owner/repo is in allowlist
+      const isAllowed = allowlist.some(item =>
+        item.toLowerCase() === owner.toLowerCase() ||
+        (ownerRepo && item.toLowerCase() === ownerRepo.toLowerCase())
+      );
+
+      if (!isAllowed) {
+        return false;
+      }
+    } else {
+      // Not on a repo or org page (e.g. dashboard), disable if allowlist is active
+      // Or maybe we should allow it on dashboard? For now, strict allowlist.
+      return false;
+    }
   }
 
   // Check feature-level toggle

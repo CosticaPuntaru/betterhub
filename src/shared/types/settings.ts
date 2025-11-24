@@ -10,7 +10,8 @@ export interface Settings {
   // Global settings
   language: string;
   theme: 'light' | 'dark';
-  enabled: boolean; // Master toggle for entire extension
+  enableMode: 'on' | 'off' | 'allowlist'; // Master toggle mode
+  allowlist: string[]; // List of orgs or repos for allowlist mode
   debug: boolean; // Debug mode toggle
 
   // Feature enable/disable toggles
@@ -58,7 +59,8 @@ export interface PRListSettings {
 export const DEFAULT_SETTINGS: Settings = {
   language: 'en',
   theme: 'light',
-  enabled: true, // Extension enabled by default
+  enableMode: 'on',
+  allowlist: [],
   debug: false,
   features: {
     'pr-list-customization': true,
@@ -87,8 +89,6 @@ export const DEFAULT_SETTINGS: Settings = {
     autoHarvestUsers: false,
     autoHarvestProjects: false,
     autoHarvestOrgs: false,
-    harvestOrgWhitelist: 'all',
-    harvestRepoWhitelist: 'all',
     autoAliasUsers: false,
     autoAliasProjects: false,
     autoAliasOrgs: false,

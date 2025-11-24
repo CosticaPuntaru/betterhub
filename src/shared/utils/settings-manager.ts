@@ -128,7 +128,9 @@ class SettingsManager {
     return {
       ...DEFAULT_SETTINGS,
       ...stored,
-      enabled: stored?.enabled ?? DEFAULT_SETTINGS.enabled,
+      // Migration: map old 'enabled' boolean to 'enableMode' if 'enableMode' is missing
+      enableMode: stored?.enableMode ?? (stored?.enabled === false ? 'off' : 'on'),
+      allowlist: stored?.allowlist ?? DEFAULT_SETTINGS.allowlist,
       features: {
         ...DEFAULT_SETTINGS.features,
         ...(stored?.features || {}),

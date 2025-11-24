@@ -168,8 +168,9 @@ export function AppContent() {
 
                 <main className="space-y-6">
                     <GlobalMasterToggle
-                        enabled={settings.enabled ?? true}
-                        onToggle={(enabled) => updateSettings({ enabled })}
+                        enableMode={settings.enableMode ?? 'on'}
+                        allowlist={settings.allowlist ?? []}
+                        onUpdate={updateSettings}
                     />
 
                     <div className="flex items-center justify-end">
@@ -201,7 +202,7 @@ export function AppContent() {
                                 key={feature.id}
                                 featureId={feature.id}
                                 schema={feature.settingsSchema}
-                                globalEnabled={settings.enabled ?? true}
+                                globalEnabled={settings.enableMode !== 'off'}
                             />
                         ))
                     )}

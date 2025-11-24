@@ -8,7 +8,6 @@ import type { Settings } from '../../shared/types/settings';
 import { harvestUsers, harvestProjects, harvestOrgs } from './harvester';
 import { generateAutoAlias, applyAliases } from './alias-manager';
 import type { AliasItem } from './types';
-import { getCurrentOrg, getCurrentRepo } from './utils';
 import './styles.css';
 
 let observer: MutationObserver | null = null;
@@ -23,60 +22,29 @@ const HARVEST_COOLDOWN = 2000; // Don't harvest more than once every 2 seconds
  */
 async function performAutoHarvest(settings: Settings): Promise<void> {
   if (!settings.aliasing) return;
-  
+
   // Prevent recursive harvesting
   if (isHarvesting) {
     console.log('[Aliasing] Harvest already in progress, skipping');
     return;
   }
-  
+
   // Cooldown to prevent rapid re-harvesting
   const now = Date.now();
   if (now - lastHarvestTime < HARVEST_COOLDOWN) {
     console.log('[Aliasing] Harvest cooldown active, skipping');
     return;
   }
-  
+
   isHarvesting = true;
   lastHarvestTime = now;
 
   const aliasing = settings.aliasing;
-  
+
   // Check if harvesting is allowed for current page
-  const currentOrg = getCurrentOrg();
-  const currentRepo = getCurrentRepo();
-  
-  // Check org whitelist
-  const orgWhitelist = aliasing.harvestOrgWhitelist;
-  const orgAllowed = orgWhitelist === 'all' || 
-    (Array.isArray(orgWhitelist) && currentOrg && orgWhitelist.some(org => 
-      org.toLowerCase() === currentOrg.toLowerCase()
-    ));
-  
-  // Check repo whitelist
-  const repoWhitelist = aliasing.harvestRepoWhitelist;
-  const repoAllowed = repoWhitelist === 'all' ||
-    (Array.isArray(repoWhitelist) && currentRepo && repoWhitelist.some(repo =>
-      repo.toLowerCase() === currentRepo.toLowerCase()
-    ));
-  
-  // Harvesting is allowed if:
-  // - Org whitelist is 'all' OR current org is in whitelist OR we're not on an org page
-  // - AND repo whitelist is 'all' OR current repo is in whitelist OR we're not on a repo page
-  const isHarvestingAllowed = (orgWhitelist === 'all' || orgAllowed || !currentOrg) &&
-                              (repoWhitelist === 'all' || repoAllowed || !currentRepo);
-  
-  if (!isHarvestingAllowed) {
-    console.log('[Aliasing] Harvesting not allowed for current page:', {
-      currentOrg,
-      currentRepo,
-      orgWhitelist,
-      repoWhitelist,
-    });
-    isHarvesting = false;
-    return;
-  }
-  
+  // Note: Global allowlist is handled by the extension enable logic.
+  // If we are here, the extension is enabled for this page.
+
   const harvestedUsers: AliasItem[] = [];
   const harvestedProjects: AliasItem[] = [];
   const harvestedOrgs: AliasItem[] = [];
@@ -87,17 +55,17 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
     const users = harvestUsers();
     console.log('[Aliasing] Harvested users:', users);
     console.log(`[Aliasing] Found ${users.length} users on page`);
-    
+
     for (const user of users) {
       const existing = aliasing.users.find(
         u => u.original.toLowerCase() === user.original.toLowerCase()
       );
       if (!existing) {
         console.log(`[Aliasing] Adding new user: ${user.original}${user.icon ? ' (with icon)' : ''}`);
-        harvestedUsers.push({ 
-          original: user.original, 
-          alias: user.original, 
-          enabled: true, 
+        harvestedUsers.push({
+          original: user.original,
+          alias: user.original,
+          enabled: true,
           icon: user.icon,
         });
       } else {
@@ -118,9 +86,9 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
         p => p.original.toLowerCase() === project.original.toLowerCase()
       );
       if (!existing) {
-        harvestedProjects.push({ 
-          original: project.original, 
-          alias: project.original, 
+        harvestedProjects.push({
+          original: project.original,
+          alias: project.original,
           enabled: true,
         });
       }
@@ -136,9 +104,9 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
         o => o.original.toLowerCase() === org.original.toLowerCase()
       );
       if (!existing) {
-        harvestedOrgs.push({ 
-          original: org.original, 
-          alias: org.original, 
+        harvestedOrgs.push({
+          original: org.original,
+          alias: org.original,
           enabled: true,
         });
       }
@@ -147,16 +115,16 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
 
   // Save harvested items (only if they don't already exist)
   const hasNewItems = harvestedUsers.length > 0 || harvestedProjects.length > 0 || harvestedOrgs.length > 0;
-  
+
   if (hasNewItems) {
-    console.log('[Aliasing] Saving harvested items:', { 
-      users: harvestedUsers.length, 
-      projects: harvestedProjects.length, 
-      orgs: harvestedOrgs.length 
+    console.log('[Aliasing] Saving harvested items:', {
+      users: harvestedUsers.length,
+      projects: harvestedProjects.length,
+      orgs: harvestedOrgs.length
     });
     console.log('[Aliasing] Harvested users details:', harvestedUsers.map(u => u.original));
-    
-    const updatedAliasing = { 
+
+    const updatedAliasing = {
       ...aliasing,
       users: [...(aliasing.users || []), ...harvestedUsers],
       projects: [...(aliasing.projects || []), ...harvestedProjects],
@@ -170,7 +138,7 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
     });
 
     await settingsManager.updateSettings({ aliasing: updatedAliasing });
-    
+
     // Verify the save worked
     const verifySettings = await settingsManager.getSettings();
     console.log('[Aliasing] Verification - Settings after save:', {
@@ -178,12 +146,12 @@ async function performAutoHarvest(settings: Settings): Promise<void> {
       projects: verifySettings.aliasing?.projects?.length || 0,
       orgs: verifySettings.aliasing?.orgs?.length || 0
     });
-    
+
     console.log('[Aliasing] Harvested items saved successfully');
   } else {
     console.log('[Aliasing] No new items to save');
   }
-  
+
   isHarvesting = false;
 }
 
@@ -258,30 +226,30 @@ export async function initialize(settings: Settings): Promise<void> {
       const hasAliasModifications = mutations.some(mutation => {
         return Array.from(mutation.addedNodes).some(node => {
           const el = node as HTMLElement;
-          return el?.dataset?.betterhubAlias === 'true' || 
-                 el?.classList?.contains('betterhub-alias-badge') ||
-                 el?.classList?.contains('betterhub-alias-modified');
+          return el?.dataset?.betterhubAlias === 'true' ||
+            el?.classList?.contains('betterhub-alias-badge') ||
+            el?.classList?.contains('betterhub-alias-modified');
         });
       });
-      
+
       if (hasAliasModifications) {
         // These are our own changes, don't re-harvest
         return;
       }
-      
+
       // Debounce to prevent rapid re-processing
       if (mutationTimeout) {
         clearTimeout(mutationTimeout);
       }
-      
+
       mutationTimeout = window.setTimeout(async () => {
         if (currentSettings && !isApplying && !isHarvesting) {
           // Re-apply aliases when DOM changes
           await applyAliasesToPage(currentSettings);
-          
+
           // Re-harvest if enabled (with cooldown)
           await performAutoHarvest(currentSettings);
-          
+
           // Re-auto-alias if enabled
           await performAutoAlias(currentSettings);
         }

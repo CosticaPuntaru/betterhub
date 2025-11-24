@@ -17,16 +17,12 @@ export interface AliasingSettings {
   users: AliasItem[];
   projects: AliasItem[];
   orgs: AliasItem[];
-  
+
   // Auto-harvest flags
   autoHarvestUsers: boolean;
   autoHarvestProjects: boolean;
   autoHarvestOrgs: boolean;
-  
-  // Harvest whitelists: 'all' means harvest everywhere, array means only in listed orgs/repos
-  harvestOrgWhitelist: string[] | 'all';
-  harvestRepoWhitelist: string[] | 'all';
-  
+
   // Auto-alias flags
   autoAliasUsers: boolean;
   autoAliasProjects: boolean;

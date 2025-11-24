@@ -8,7 +8,6 @@ import { Textarea } from './ui/textarea';
 import { Select } from './ui/select';
 import { useSettingsStore } from '../store/settings-store';
 import { AliasList } from './AliasList';
-import { HarvestWhitelist } from './HarvestWhitelist';
 import type { FeatureSettingsSchema, SettingField } from '../../shared/types/settings-ui';
 import { cn } from '../lib/utils';
 
@@ -188,33 +187,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
               );
             }
 
-            if (field.type === 'harvest-whitelist') {
-              const keyParts = field.key.split('.');
-              if (keyParts.length < 2) return null;
-              const lastPart = keyParts[keyParts.length - 1];
-              let whitelistType: 'org' | 'repo';
-              if (lastPart.includes('Org')) {
-                whitelistType = 'org';
-              } else if (lastPart.includes('Repo')) {
-                whitelistType = 'repo';
-              } else {
-                return null;
-              }
 
-              return (
-                <div key={field.key} className="space-y-2">
-                  <Label>{label}</Label>
-                  {description && (
-                    <p className="text-sm text-muted-foreground">{description}</p>
-                  )}
-                  <HarvestWhitelist
-                    whitelistType={whitelistType}
-                    settingKey={field.key}
-                    disabled={isDisabled}
-                  />
-                </div>
-              );
-            }
 
             const value = getNestedValue(settings, field.key) ?? field.default;
 
