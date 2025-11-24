@@ -46,8 +46,6 @@ async function validate() {
             // Provide defaults for other required fields to satisfy TS
             autoHarvestProjects: initial.aliasing?.autoHarvestProjects ?? false,
             autoHarvestOrgs: initial.aliasing?.autoHarvestOrgs ?? false,
-            harvestOrgWhitelist: initial.aliasing?.harvestOrgWhitelist ?? 'all',
-            harvestRepoWhitelist: initial.aliasing?.harvestRepoWhitelist ?? 'all',
             autoAliasUsers: initial.aliasing?.autoAliasUsers ?? false,
             autoAliasProjects: initial.aliasing?.autoAliasProjects ?? false,
             autoAliasOrgs: initial.aliasing?.autoAliasOrgs ?? false,

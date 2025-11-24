@@ -122,6 +122,11 @@ function shouldFeatureBeEnabled(
     return currentPath.includes('/pulls') || currentPath.includes('/pull/');
   }
 
+  if (featureId === 'hide-whitespace') {
+    // Works on PR files tab
+    return currentPath.includes('/pull/') && currentPath.includes('/files');
+  }
+
   return false;
 }
 
@@ -145,6 +150,11 @@ async function initializeFeatures(settings: Settings): Promise<void> {
   // Check read-comments-tracker feature
   if (shouldFeatureBeEnabled('read-comments-tracker', settings, currentPath)) {
     enabledFeatures.push('read-comments-tracker');
+  }
+
+  // Check hide-whitespace feature
+  if (shouldFeatureBeEnabled('hide-whitespace', settings, currentPath)) {
+    enabledFeatures.push('hide-whitespace');
   }
 
   // Load all enabled features

@@ -31,6 +31,7 @@ export interface FeatureToggles {
   'pr-list-customization': boolean;
   'aliasing': boolean;
   'read-comments-tracker': boolean;
+  'hide-whitespace': boolean;
   // Add more feature toggles here as features are added
   [featureId: string]: boolean;
 }
@@ -54,6 +55,8 @@ export interface PRListSettings {
   hideCommentCounts: boolean;
   hideTimestamps: boolean;
   hideBranchNames: boolean;
+  hidePrMetaInfo: boolean;
+  hideReviewStatusText: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -66,6 +69,7 @@ export const DEFAULT_SETTINGS: Settings = {
     'pr-list-customization': true,
     'aliasing': true,
     'read-comments-tracker': true,
+    'hide-whitespace': true,
   },
   prList: {
     enabledOnPages: {
@@ -81,6 +85,8 @@ export const DEFAULT_SETTINGS: Settings = {
     hideCommentCounts: false,
     hideTimestamps: false,
     hideBranchNames: false,
+    hidePrMetaInfo: false,
+    hideReviewStatusText: false,
   },
   aliasing: {
     users: [],

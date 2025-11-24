@@ -68,6 +68,7 @@ export function AppContent() {
             await import('../../features/pr-list-customization/index');
             await import('../../features/aliasing/index');
             await import('../../features/read-comments-tracker/index');
+            await import('../../features/hide-whitespace/index');
         } catch (error) {
             console.error('Failed to load features:', error);
         }
