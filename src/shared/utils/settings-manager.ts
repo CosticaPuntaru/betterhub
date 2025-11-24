@@ -50,7 +50,7 @@ class SettingsManager {
         ...(partial.features || {}),
       },
     };
-    
+
     // Merge prList if provided
     if (partial.prList) {
       updated.prList = {
@@ -62,7 +62,7 @@ class SettingsManager {
         },
       };
     }
-    
+
     // Merge aliasing if provided (deep merge to preserve arrays)
     if (partial.aliasing) {
       updated.aliasing = {
@@ -74,7 +74,17 @@ class SettingsManager {
         orgs: partial.aliasing.orgs ?? current.aliasing?.orgs ?? [],
       };
     }
-    
+
+    // Merge readCommentsTracker if provided
+    if (partial.readCommentsTracker) {
+      updated.readCommentsTracker = {
+        ...current.readCommentsTracker,
+        ...partial.readCommentsTracker,
+      };
+    }
+
+    console.log('[Settings Manager] Saving updated settings. Aliasing:', updated.aliasing);
+
     await storage.set({ settings: updated });
     this.cachedSettings = updated;
     this.notifyListeners(updated);
@@ -131,6 +141,18 @@ class SettingsManager {
           ...(stored?.prList?.enabledOnPages || {}),
         },
       },
+      aliasing: {
+        ...DEFAULT_SETTINGS.aliasing,
+        ...(stored?.aliasing || {}),
+        // Ensure arrays are preserved if they exist in stored, otherwise use default (empty)
+        users: stored?.aliasing?.users ?? DEFAULT_SETTINGS.aliasing?.users ?? [],
+        projects: stored?.aliasing?.projects ?? DEFAULT_SETTINGS.aliasing?.projects ?? [],
+        orgs: stored?.aliasing?.orgs ?? DEFAULT_SETTINGS.aliasing?.orgs ?? [],
+      },
+      readCommentsTracker: {
+        ...DEFAULT_SETTINGS.readCommentsTracker,
+        ...(stored?.readCommentsTracker || {}),
+      },
     } as Settings;
   }
 
@@ -139,6 +161,12 @@ class SettingsManager {
       const newSettings = this.mergeWithDefaults(
         changes.settings.newValue as Partial<Settings> | undefined
       );
+
+      // Prevent infinite loops: if settings haven't effectively changed, don't notify
+      if (this.cachedSettings && JSON.stringify(this.cachedSettings) === JSON.stringify(newSettings)) {
+        return;
+      }
+
       this.cachedSettings = newSettings;
       this.notifyListeners(newSettings);
     }

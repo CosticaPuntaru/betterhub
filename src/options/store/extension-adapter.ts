@@ -38,9 +38,11 @@ export async function initializeExtensionAdapter(): Promise<void> {
     await settingsManager.initialize();
 
     // Load initial settings from extension
+    console.log('[Extension Adapter] Loading settings from manager...');
     const extensionSettings = await settingsManager.getSettings();
+    console.log('[Extension Adapter] Loaded settings:', extensionSettings);
     useSettingsStore.getState().setSettings(extensionSettings);
-    useSettingsStore.getState().initialize();
+    useSettingsStore.setState({ isLoading: false, isInitialized: true });
 
     // Subscribe to extension settings changes
     unsubscribeManager = settingsManager.subscribe((updatedSettings: Settings) => {
@@ -50,18 +52,18 @@ export async function initializeExtensionAdapter(): Promise<void> {
 
     // Subscribe to Zustand store changes and sync to extension
     let isSyncing = false;
-    
+
     // Set initialized flag before subscribing to avoid race conditions
     isInitialized = true;
-    
+
     useSettingsStore.subscribe(
       (state: { settings: Settings }) => state.settings,
       (settings: Settings) => {
         // Only sync if we're not already syncing (avoid loops)
         if (!isInitialized || isSyncing) return;
-        
+
         isSyncing = true;
-        console.log('[Extension Adapter] Store changed, syncing to extension');
+        console.log('[Extension Adapter] Store changed, syncing to extension. Aliasing:', settings.aliasing);
         settingsManager.updateSettings(settings)
           .then(() => {
             isSyncing = false;

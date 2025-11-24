@@ -29,6 +29,9 @@ function getNestedValue(obj: any, key: string): unknown {
       return undefined;
     }
   }
+  if (key === 'aliasing.autoHarvestUsers') {
+    console.log('[FeatureSettings] getNestedValue for aliasing.autoHarvestUsers:', value);
+  }
   return value;
 }
 
@@ -66,6 +69,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
   }
 
   function handleFieldChange(field: SettingField, value: unknown) {
+    console.log('[FeatureSettings] handleFieldChange:', field.key, value);
     // Validate if validation function provided
     if (field.validation) {
       const error = field.validation(value);
@@ -85,6 +89,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
     }
     current[keys[keys.length - 1]] = value;
 
+    console.log('[FeatureSettings] Calling updateSettings with:', update);
     updateSettings(update);
   }
 

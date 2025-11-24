@@ -6,10 +6,11 @@
 
 // Only mock if we're not in a Chrome extension context
 if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
+  console.log('[Chrome Mock] Initializing mock storage...');
   // Mock chrome.storage API using localStorage
   // Create a mock storage change event system
   const storageListeners: Array<(changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => void> = [];
-  
+
   // Helper to trigger storage change events
   const triggerStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }) => {
     storageListeners.forEach(listener => {
@@ -21,6 +22,7 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
     storage: {
       sync: {
         get: (keys: string | string[] | { [key: string]: any } | null, callback?: (items: { [key: string]: any }) => void) => {
+          console.log('[Chrome Mock] Storage GET:', keys);
           const result: { [key: string]: any } = {};
           let keysArray: string[] = [];
 
@@ -52,24 +54,25 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
           return Promise.resolve(result);
         },
         set: (items: { [key: string]: any }, callback?: () => void) => {
+          console.log('[Chrome Mock] Storage SET:', items);
           const changes: { [key: string]: chrome.storage.StorageChange } = {};
-          
+
           Object.keys(items).forEach(key => {
             const oldValue = localStorage.getItem(key);
             const newValue = items[key];
             localStorage.setItem(key, JSON.stringify(newValue));
-            
+
             changes[key] = {
               oldValue: oldValue ? JSON.parse(oldValue) : undefined,
               newValue: newValue,
             };
           });
-          
+
           // Trigger storage change event
           if (Object.keys(changes).length > 0) {
             triggerStorageChange(changes);
           }
-          
+
           if (callback) {
             callback();
           }
@@ -78,7 +81,7 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
         remove: (keys: string | string[], callback?: () => void) => {
           const keysArray = Array.isArray(keys) ? keys : [keys];
           const changes: { [key: string]: chrome.storage.StorageChange } = {};
-          
+
           keysArray.forEach(key => {
             const oldValue = localStorage.getItem(key);
             if (oldValue) {
@@ -89,12 +92,12 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
             }
             localStorage.removeItem(key);
           });
-          
+
           // Trigger storage change event
           if (Object.keys(changes).length > 0) {
             triggerStorageChange(changes);
           }
-          
+
           if (callback) {
             callback();
           }
@@ -102,7 +105,7 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
         },
         clear: (callback?: () => void) => {
           const changes: { [key: string]: chrome.storage.StorageChange } = {};
-          
+
           Object.keys(localStorage).forEach(key => {
             if (key.startsWith('settings') || key === 'settings') {
               const oldValue = localStorage.getItem(key);
@@ -115,12 +118,12 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
               localStorage.removeItem(key);
             }
           });
-          
+
           // Trigger storage change event
           if (Object.keys(changes).length > 0) {
             triggerStorageChange(changes);
           }
-          
+
           if (callback) {
             callback();
           }
@@ -145,7 +148,7 @@ if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
     runtime: {
       id: 'dev-mode-extension-id',
       onInstalled: {
-        addListener: () => {},
+        addListener: () => { },
       },
     },
   };
