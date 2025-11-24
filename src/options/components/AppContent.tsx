@@ -69,6 +69,15 @@ export function AppContent() {
             await import('../../features/aliasing/index');
             await import('../../features/read-comments-tracker/index');
             await import('../../features/hide-whitespace/index');
+            await import('../../features/sticky-headers/index');
+            await import('../../features/package-links/index');
+            await import('../../features/image-size/index');
+            await import('../../features/copy-path/index');
+            await import('../../features/viewed-checkbox/index');
+            await import('../../features/expand-resolved/index');
+            await import('../../features/prevent-close/index');
+            await import('../../features/reaction-avatars/index');
+            await import('../../features/build-favicon/index');
         } catch (error) {
             console.error('Failed to load features:', error);
         }

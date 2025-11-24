@@ -32,6 +32,15 @@ export interface FeatureToggles {
   'aliasing': boolean;
   'read-comments-tracker': boolean;
   'hide-whitespace': boolean;
+  'sticky-headers': boolean;
+  'package-links': boolean;
+  'image-size': boolean;
+  'copy-path': boolean;
+  'viewed-checkbox': boolean;
+  'expand-resolved': boolean;
+  'prevent-close': boolean;
+  'reaction-avatars': boolean;
+  'build-favicon': boolean;
   // Add more feature toggles here as features are added
   [featureId: string]: boolean;
 }
@@ -70,6 +79,15 @@ export const DEFAULT_SETTINGS: Settings = {
     'aliasing': true,
     'read-comments-tracker': true,
     'hide-whitespace': true,
+    'sticky-headers': true,
+    'package-links': true,
+    'image-size': true,
+    'copy-path': true,
+    'viewed-checkbox': true,
+    'expand-resolved': true,
+    'prevent-close': true,
+    'reaction-avatars': true,
+    'build-favicon': true,
   },
   prList: {
     enabledOnPages: {

@@ -127,6 +127,51 @@ function shouldFeatureBeEnabled(
     return currentPath.includes('/pull/') && currentPath.includes('/files');
   }
 
+  if (featureId === 'sticky-headers') {
+    // Works on PR files tab
+    return currentPath.includes('/pull/') && currentPath.includes('/files');
+  }
+
+  if (featureId === 'package-links') {
+    // Works on file blob pages
+    return currentPath.includes('/blob/');
+  }
+
+  if (featureId === 'image-size') {
+    // Works on file blob pages and PR pages
+    return currentPath.includes('/blob/') || currentPath.includes('/pull/');
+  }
+
+  if (featureId === 'copy-path') {
+    // Works on file blob pages and PR pages
+    return currentPath.includes('/blob/') || currentPath.includes('/pull/');
+  }
+
+  if (featureId === 'viewed-checkbox') {
+    // Works on PR files tab
+    return currentPath.includes('/pull/') && currentPath.includes('/files');
+  }
+
+  if (featureId === 'expand-resolved') {
+    // Works on PR conversation pages
+    return currentPath.includes('/pull/') && !currentPath.includes('/files');
+  }
+
+  if (featureId === 'prevent-close') {
+    // Works on all GitHub pages
+    return true;
+  }
+
+  if (featureId === 'reaction-avatars') {
+    // Works on pages with comments
+    return currentPath.includes('/pull/') || currentPath.includes('/issues/');
+  }
+
+  if (featureId === 'build-favicon') {
+    // Works on PR pages
+    return currentPath.includes('/pull/');
+  }
+
   return false;
 }
 
@@ -155,6 +200,51 @@ async function initializeFeatures(settings: Settings): Promise<void> {
   // Check hide-whitespace feature
   if (shouldFeatureBeEnabled('hide-whitespace', settings, currentPath)) {
     enabledFeatures.push('hide-whitespace');
+  }
+
+  // Check sticky-headers feature
+  if (shouldFeatureBeEnabled('sticky-headers', settings, currentPath)) {
+    enabledFeatures.push('sticky-headers');
+  }
+
+  // Check package-links feature
+  if (shouldFeatureBeEnabled('package-links', settings, currentPath)) {
+    enabledFeatures.push('package-links');
+  }
+
+  // Check image-size feature
+  if (shouldFeatureBeEnabled('image-size', settings, currentPath)) {
+    enabledFeatures.push('image-size');
+  }
+
+  // Check copy-path feature
+  if (shouldFeatureBeEnabled('copy-path', settings, currentPath)) {
+    enabledFeatures.push('copy-path');
+  }
+
+  // Check viewed-checkbox feature
+  if (shouldFeatureBeEnabled('viewed-checkbox', settings, currentPath)) {
+    enabledFeatures.push('viewed-checkbox');
+  }
+
+  // Check expand-resolved feature
+  if (shouldFeatureBeEnabled('expand-resolved', settings, currentPath)) {
+    enabledFeatures.push('expand-resolved');
+  }
+
+  // Check prevent-close feature
+  if (shouldFeatureBeEnabled('prevent-close', settings, currentPath)) {
+    enabledFeatures.push('prevent-close');
+  }
+
+  // Check reaction-avatars feature
+  if (shouldFeatureBeEnabled('reaction-avatars', settings, currentPath)) {
+    enabledFeatures.push('reaction-avatars');
+  }
+
+  // Check build-favicon feature
+  if (shouldFeatureBeEnabled('build-favicon', settings, currentPath)) {
+    enabledFeatures.push('build-favicon');
   }
 
   // Load all enabled features
