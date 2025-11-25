@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSettingsStore } from '../store/settings-store';
 import { featureRegistry } from '../../shared/utils/feature-registry';
-import { setLanguage } from '../../shared/utils/i18n';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent } from './ui/card';
-import { Select } from './ui/select';
 import { FeatureSettings } from './FeatureSettings';
 import { GlobalMasterToggle } from './GlobalMasterToggle';
 import { Switch } from './ui/switch';
-import { Search, Download, Upload, RotateCcw, Moon, Sun, Languages } from 'lucide-react';
+import { Search, Download, Upload, RotateCcw, Moon, Sun } from 'lucide-react';
 import { useDeepLinking } from '../hooks/useDeepLinking';
 import { useSettingsExportImport } from '../hooks/useSettingsExportImport';
+import { LanguageSelector } from './LanguageSelector';
 
 export function AppContent() {
     const { t } = useTranslation();
@@ -115,24 +114,7 @@ export function AppContent() {
                     <div className="flex items-center justify-between mb-4">
                         <h1 className="text-3xl font-bold">{t('options.title')}</h1>
                         <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-2">
-                                <Languages className="h-4 w-4 text-muted-foreground" />
-                                <Select
-                                    value={settings.language || 'en'}
-                                    onChange={(e) => {
-                                        const newLang = e.target.value;
-                                        updateSettings({ language: newLang });
-                                        setLanguage(newLang);
-                                    }}
-                                    className="h-9 w-32"
-                                >
-                                    <option value="en">English</option>
-                                    <option value="es">Español</option>
-                                    <option value="fr">Français</option>
-                                    <option value="de">Deutsch</option>
-                                    <option value="ro">Română</option>
-                                </Select>
-                            </div>
+                            <LanguageSelector />
                             <Button
                                 variant="ghost"
                                 size="icon"

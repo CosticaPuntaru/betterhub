@@ -118,26 +118,26 @@ export function FeatureSettings({ featureId, schema, globalEnabled, searchQuery 
   const isDisabled = !globalEnabled || !featureEnabled;
 
   return (
-    <Card data-feature-id={featureId} className={cn('feature-settings-section')}>
-      <CardHeader>
-        <label className="flex items-center gap-3 cursor-pointer">
+    <Card data-feature-id={featureId} className={cn('feature-settings-section text-sm')}>
+      <CardHeader className="!p-2">
+        <label className="flex items-center gap-3 cursor-pointer text-xs">
           <Switch
             checked={featureEnabled}
             onChange={(e) => handleFeatureToggle(e.target.checked)}
             disabled={!globalEnabled}
           />
           <div className="flex items-center gap-2">
-            <CardTitle className="mb-0">{t(`features.${featureId}.title`, { defaultValue: schema.displayName })}</CardTitle>
+            <CardTitle className="mb-0 text-sm">{t(`features.${featureId}.title`, { defaultValue: schema.displayName })}</CardTitle>
             {schema.description && (
               <InfoIcon tooltip={t(`features.${featureId}.description`, { defaultValue: schema.description })} />
             )}
           </div>
         </label>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-2 !p-2">
         {schema.pages && schema.pages.length > 0 && (
           <div className="space-y-2">
-            <h3 className="text-base font-semibold">{t('options.enableOnPages')}</h3>
+            <h3 className="text-sm font-semibold">{t('options.enableOnPages')}</h3>
             <div className="space-y-1.5">
               {schema.pages.map((page) => (
                 <label key={page.pageId} className="flex items-center gap-3 cursor-pointer">
@@ -162,7 +162,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled, searchQuery 
           </div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {schema.fields
             .filter((field) => {
               // If no search query, show all fields
