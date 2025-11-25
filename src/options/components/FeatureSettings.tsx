@@ -10,6 +10,7 @@ import { useSettingsStore } from '../store/settings-store';
 import { AliasList } from './AliasList';
 import type { FeatureSettingsSchema, SettingField } from '../../shared/types/settings-ui';
 import { cn } from '../lib/utils';
+import { InfoIcon } from './ui/tooltip';
 
 interface FeatureSettingsProps {
   featureId: string;
@@ -127,7 +128,7 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
           <div className="flex items-center gap-2">
             <CardTitle className="mb-0">{t(`features.${featureId}.title`, { defaultValue: schema.displayName })}</CardTitle>
             {schema.description && (
-              <span className="text-sm text-muted-foreground">, {t(`features.${featureId}.description`, { defaultValue: schema.description })}</span>
+              <InfoIcon tooltip={t(`features.${featureId}.description`, { defaultValue: schema.description })} />
             )}
           </div>
         </label>
@@ -148,10 +149,10 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                       handlePageToggle(page.pageId, enabled);
                     }}
                   />
-                  <span className="text-sm font-normal">
+                  <span className="text-sm font-normal flex items-center gap-2">
                     {t(`features.${featureId}.pages.${page.pageId}.label`, { defaultValue: page.label })}
                     {page.description && (
-                      <span className="text-muted-foreground">, {t(`features.${featureId}.pages.${page.pageId}.description`, { defaultValue: page.description })}</span>
+                      <InfoIcon tooltip={t(`features.${featureId}.pages.${page.pageId}.description`, { defaultValue: page.description })} />
                     )}
                   </span>
                 </label>
@@ -200,10 +201,10 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
                       onChange={(e) => handleFieldChange(field, e.target.checked)}
                       disabled={isDisabled}
                     />
-                    <span className="text-sm font-normal">
+                    <span className="text-sm font-normal flex items-center gap-2">
                       {label}
                       {description && (
-                        <span className="text-muted-foreground">, {description}</span>
+                        <InfoIcon tooltip={description} />
                       )}
                     </span>
                   </label>
