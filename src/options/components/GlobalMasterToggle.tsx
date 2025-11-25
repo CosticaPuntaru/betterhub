@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Trans } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Select } from './ui/select';
 import { Input } from './ui/input';
@@ -41,11 +40,6 @@ export function GlobalMasterToggle({ enableMode, allowlist, onUpdate }: GlobalMa
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CardTitle className="mb-0">Enable BetterHub</CardTitle>
-            <span className="text-sm text-muted-foreground">
-              <Trans i18nKey="options.enableBetterHubDesc">
-                , Control where BetterHub is active
-              </Trans>
-            </span>
           </div>
           <Select
             value={enableMode}

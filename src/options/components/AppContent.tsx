@@ -95,8 +95,17 @@ export function AppContent() {
         if (!searchQuery) return true;
         const query = searchQuery.toLowerCase();
         const schema = feature.settingsSchema;
-        const text = `${schema.displayName} ${schema.description || ''} ${schema.fields.map((f: any) => f.label).join(' ')}`.toLowerCase();
-        return text.includes(query);
+
+        // Search through feature name and description
+        const featureText = `${schema.displayName} ${schema.description || ''}`.toLowerCase();
+        if (featureText.includes(query)) return true;
+
+        // Search through all field labels and descriptions
+        const fieldsText = schema.fields.map((f: any) =>
+            `${f.label} ${f.description || ''}`
+        ).join(' ').toLowerCase();
+
+        return fieldsText.includes(query);
     });
 
     return (
@@ -213,6 +222,7 @@ export function AppContent() {
                                 featureId={feature.id}
                                 schema={feature.settingsSchema}
                                 globalEnabled={settings.enableMode !== 'off'}
+                                searchQuery={searchQuery}
                             />
                         ))
                     )}

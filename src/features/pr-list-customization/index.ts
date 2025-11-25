@@ -12,13 +12,6 @@ const settingsSchema: FeatureSettingsSchema = {
   featureId,
   displayName: 'PR List Customization',
   description: 'Customize which elements are shown on pull request listing pages',
-  pages: [
-    {
-      pageId: 'pulls',
-      label: 'Pull Requests Page',
-      description: 'Enable on pull requests listing page',
-    },
-  ],
   fields: [
     {
       key: 'prList.hideLabels',

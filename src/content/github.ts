@@ -101,15 +101,8 @@ function shouldFeatureBeEnabled(
 
   // Check page-specific toggles
   if (featureId === 'pr-list-customization') {
-    if (!settings.prList) {
-      return false;
-    }
-
-    // Check if enabled on current page
-    if (currentPath.includes('/pulls')) {
-      return settings.prList.enabledOnPages?.pulls ?? true;
-    }
-    // Add more page checks as needed
+    // Only works on pull request listing pages
+    return currentPath.includes('/pulls');
   }
 
   if (featureId === 'aliasing') {

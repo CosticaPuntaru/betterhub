@@ -16,6 +16,7 @@ interface FeatureSettingsProps {
   featureId: string;
   schema: FeatureSettingsSchema;
   globalEnabled: boolean;
+  searchQuery?: string;
 }
 
 // Helper to get nested value from settings
@@ -35,7 +36,7 @@ function getNestedValue(obj: any, key: string): unknown {
   return value;
 }
 
-export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSettingsProps) {
+export function FeatureSettings({ featureId, schema, globalEnabled, searchQuery }: FeatureSettingsProps) {
   const { t } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
   const [pageToggles, setPageToggles] = useState<Record<string, boolean>>({});
@@ -162,122 +163,134 @@ export function FeatureSettings({ featureId, schema, globalEnabled }: FeatureSet
         )}
 
         <div className="space-y-3">
-          {schema.fields.map((field) => {
-            const label = t(`features.${featureId}.fields.${field.key}.label`, { defaultValue: field.label });
-            const description = field.description ? t(`features.${featureId}.fields.${field.key}.description`, { defaultValue: field.description }) : undefined;
+          {schema.fields
+            .filter((field) => {
+              // If no search query, show all fields
+              if (!searchQuery) return true;
 
-            if (field.type === 'alias-list') {
-              const keyParts = field.key.split('.');
-              if (keyParts.length < 2) return null;
-              const lastPart = keyParts[keyParts.length - 1];
-              const aliasType = lastPart.endsWith('s') ? lastPart.slice(0, -1) : lastPart;
-              if (aliasType !== 'user' && aliasType !== 'project' && aliasType !== 'org') return null;
+              const query = searchQuery.toLowerCase();
+              const label = field.label.toLowerCase();
+              const description = (field.description || '').toLowerCase();
 
-              return (
-                <div key={field.key} className="space-y-2">
-                  <Label>{label}</Label>
-                  {description && (
-                    <p className="text-sm text-muted-foreground">{description}</p>
-                  )}
-                  <AliasList
-                    aliasType={aliasType as 'user' | 'project' | 'org'}
-                    settingKey={field.key}
-                    disabled={isDisabled}
-                  />
-                </div>
-              );
-            }
+              // Show field if label or description matches
+              return label.includes(query) || description.includes(query);
+            })
+            .map((field) => {
+              const label = t(`features.${featureId}.fields.${field.key}.label`, { defaultValue: field.label });
+              const description = field.description ? t(`features.${featureId}.fields.${field.key}.description`, { defaultValue: field.description }) : undefined;
 
+              if (field.type === 'alias-list') {
+                const keyParts = field.key.split('.');
+                if (keyParts.length < 2) return null;
+                const lastPart = keyParts[keyParts.length - 1];
+                const aliasType = lastPart.endsWith('s') ? lastPart.slice(0, -1) : lastPart;
+                if (aliasType !== 'user' && aliasType !== 'project' && aliasType !== 'org') return null;
 
-
-            const value = getNestedValue(settings, field.key) ?? field.default;
-
-            return (
-              <div key={field.key} className={field.type === 'checkbox' ? 'flex items-center gap-3' : 'space-y-2'}>
-                {field.type === 'checkbox' ? (
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <Switch
-                      checked={Boolean(value)}
-                      onChange={(e) => handleFieldChange(field, e.target.checked)}
-                      disabled={isDisabled}
-                    />
-                    <span className="text-sm font-normal flex items-center gap-2">
-                      {label}
-                      {description && (
-                        <InfoIcon tooltip={description} />
-                      )}
-                    </span>
-                  </label>
-                ) : (
-                  <>
+                return (
+                  <div key={field.key} className="space-y-2">
                     <Label>{label}</Label>
                     {description && (
                       <p className="text-sm text-muted-foreground">{description}</p>
                     )}
-                  </>
-                )}
-                {field.type !== 'checkbox' && field.type === 'text' && (
-                  <Input
-                    type="text"
-                    value={String(value ?? '')}
-                    onChange={(e) => handleFieldChange(field, e.target.value)}
-                    placeholder={field.placeholder}
-                    disabled={isDisabled}
-                  />
-                )}
-                {field.type !== 'checkbox' && field.type === 'textarea' && (
-                  <Textarea
-                    value={String(value ?? '')}
-                    onChange={(e) => handleFieldChange(field, e.target.value)}
-                    placeholder={field.placeholder}
-                    disabled={isDisabled}
-                  />
-                )}
-                {field.type !== 'checkbox' && field.type === 'number' && (
-                  <Input
-                    type="number"
-                    value={String(value ?? field.default ?? '')}
-                    onChange={(e) => handleFieldChange(field, Number(e.target.value))}
-                    min={field.min}
-                    max={field.max}
-                    step={field.step}
-                    disabled={isDisabled}
-                  />
-                )}
-                {field.type !== 'checkbox' && field.type === 'select' && (
-                  <Select
-                    value={String(value ?? '')}
-                    onChange={(e) => handleFieldChange(field, e.target.value)}
-                    disabled={isDisabled}
-                  >
-                    {field.options?.map((option) => (
-                      <option key={String(option.value)} value={String(option.value)}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-                {field.type !== 'checkbox' && field.type === 'color' && (
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="color"
-                      value={String(value ?? field.default ?? '#000000')}
-                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                    <AliasList
+                      aliasType={aliasType as 'user' | 'project' | 'org'}
+                      settingKey={field.key}
                       disabled={isDisabled}
-                      className="w-12 h-10 p-1 cursor-pointer"
-                    />
-                    <Input
-                      type="text"
-                      value={String(value ?? field.default ?? '')}
-                      onChange={(e) => handleFieldChange(field, e.target.value)}
-                      disabled={isDisabled}
-                      className="flex-1"
                     />
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              }
+
+
+
+              const value = getNestedValue(settings, field.key) ?? field.default;
+
+              return (
+                <div key={field.key} className={field.type === 'checkbox' ? 'flex items-center gap-3' : 'space-y-2'}>
+                  {field.type === 'checkbox' ? (
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <Switch
+                        checked={Boolean(value)}
+                        onChange={(e) => handleFieldChange(field, e.target.checked)}
+                        disabled={isDisabled}
+                      />
+                      <span className="text-sm font-normal flex items-center gap-2">
+                        {label}
+                        {description && (
+                          <InfoIcon tooltip={description} />
+                        )}
+                      </span>
+                    </label>
+                  ) : (
+                    <>
+                      <Label>{label}</Label>
+                      {description && (
+                        <p className="text-sm text-muted-foreground">{description}</p>
+                      )}
+                    </>
+                  )}
+                  {field.type !== 'checkbox' && field.type === 'text' && (
+                    <Input
+                      type="text"
+                      value={String(value ?? '')}
+                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                      placeholder={field.placeholder}
+                      disabled={isDisabled}
+                    />
+                  )}
+                  {field.type !== 'checkbox' && field.type === 'textarea' && (
+                    <Textarea
+                      value={String(value ?? '')}
+                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                      placeholder={field.placeholder}
+                      disabled={isDisabled}
+                    />
+                  )}
+                  {field.type !== 'checkbox' && field.type === 'number' && (
+                    <Input
+                      type="number"
+                      value={String(value ?? field.default ?? '')}
+                      onChange={(e) => handleFieldChange(field, Number(e.target.value))}
+                      min={field.min}
+                      max={field.max}
+                      step={field.step}
+                      disabled={isDisabled}
+                    />
+                  )}
+                  {field.type !== 'checkbox' && field.type === 'select' && (
+                    <Select
+                      value={String(value ?? '')}
+                      onChange={(e) => handleFieldChange(field, e.target.value)}
+                      disabled={isDisabled}
+                    >
+                      {field.options?.map((option) => (
+                        <option key={String(option.value)} value={String(option.value)}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
+                  {field.type !== 'checkbox' && field.type === 'color' && (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="color"
+                        value={String(value ?? field.default ?? '#000000')}
+                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        disabled={isDisabled}
+                        className="w-12 h-10 p-1 cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={String(value ?? field.default ?? '')}
+                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        disabled={isDisabled}
+                        className="flex-1"
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       </CardContent>
     </Card>
