@@ -1,13 +1,41 @@
 {
-  "en": {
-    "translation": {
-      "popup.title": "BetterHub",
-      "popup.openSettings": "Open Settings",
-      "options.title": "BetterHub Settings",
-      "options.search": "Search settings...",
-      "feature.prList.name": "PR List Customization",
-      "feature.prList.description": "Customize which elements are shown on pull request listing pages"
+  "features": {
+    "aliasing": {
+      "ui": {
+        "actions": "Actions",
+        "add": "Add",
+        "addType": "Add {{type}}",
+        "alertExists": "This {{type}} already exists",
+        "alias": "Alias",
+        "aliasPlaceholder": "Enter alias",
+        "cancel": "Cancel",
+        "color": "Color",
+        "colorIcon": "Color/Icon",
+        "colorText": "Color",
+        "delete": "Delete",
+        "display": "Display",
+        "enabled": "Enabled",
+        "icon": "Icon",
+        "noIcon": "No icon",
+        "original": "Original",
+        "originalPlaceholder": "Enter {{type}} name",
+        "textToDisplay": "Text to display"
+      }
     }
+  },
+  "options": {
+    "debugMode": "options.debugMode",
+    "enableBetterHubDesc": ", Control where BetterHub is active",
+    "enableOnPages": "options.enableOnPages",
+    "export": "options.export",
+    "import": "options.import",
+    "loading": "options.loading",
+    "noFeatures": "options.noFeatures",
+    "noSearchResults": "options.noSearchResults",
+    "reset": "options.reset",
+    "search": "options.search",
+    "switchToDark": "options.switchToDark",
+    "switchToLight": "options.switchToLight",
+    "title": "options.title"
   }
 }
-

@@ -44,11 +44,25 @@ export function getCurrentLanguage(): string {
 }
 
 // Export t function for non-React code (e.g., popup.ts)
-export function t(key: string, params?: Record<string, unknown>): string {
+export function t(key: string, defaultValue?: string, params?: Record<string, unknown>): string;
+export function t(key: string, params?: Record<string, unknown>): string;
+export function t(
+  key: string,
+  defaultValueOrParams?: string | Record<string, unknown>,
+  params?: Record<string, unknown>
+): string {
   if (!i18nInstance) {
     return key;
   }
-  return i18nInstance.t(key, params);
+
+  // Handle overloaded signatures
+  if (typeof defaultValueOrParams === 'string') {
+    // t(key, defaultValue, params)
+    return i18nInstance.t(key, { defaultValue: defaultValueOrParams, ...params });
+  } else {
+    // t(key, params)
+    return i18nInstance.t(key, defaultValueOrParams);
+  }
 }
 
 // Export i18n instance for react-i18next

@@ -54,7 +54,7 @@ export function AliasList({ aliasType, disabled }: AliasListProps) {
 
     const list = aliasing[`${aliasType}s` as 'users' | 'projects' | 'orgs'] || [];
     if (list.some(a => a.original.toLowerCase() === newOriginal.toLowerCase())) {
-      alert(t('features.aliasing.ui.alertExists', { type: aliasType }));
+      alert(t('features.aliasing.ui.alertExists', 'This {{type}} already exists', { type: aliasType }));
       return;
     }
 
@@ -87,12 +87,12 @@ export function AliasList({ aliasType, disabled }: AliasListProps) {
         <table className="w-full border-collapse bg-card border border-border rounded-md overflow-hidden">
           <thead className="bg-muted">
             <tr>
-              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-20">{t('features.aliasing.ui.enabled')}</th>
-              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-36 whitespace-nowrap">{t('features.aliasing.ui.original')}</th>
-              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-36 whitespace-nowrap">{t('features.aliasing.ui.alias')}</th>
-              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-32 whitespace-nowrap">{t('features.aliasing.ui.display')}</th>
-              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border whitespace-nowrap">{t('features.aliasing.ui.colorIcon')}</th>
-              <th className="px-3 py-2.5 text-right text-xs font-semibold text-foreground border-b border-border w-24 whitespace-nowrap">{t('features.aliasing.ui.actions')}</th>
+              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-20">{t('features.aliasing.ui.enabled', 'Enabled')}</th>
+              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-36 whitespace-nowrap">{t('features.aliasing.ui.original', 'Original')}</th>
+              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-36 whitespace-nowrap">{t('features.aliasing.ui.alias', 'Alias')}</th>
+              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border w-32 whitespace-nowrap">{t('features.aliasing.ui.display', 'Display')}</th>
+              <th className="px-3 py-2.5 text-left text-xs font-semibold text-foreground border-b border-border whitespace-nowrap">{t('features.aliasing.ui.colorIcon', 'Color/Icon')}</th>
+              <th className="px-3 py-2.5 text-right text-xs font-semibold text-foreground border-b border-border w-24 whitespace-nowrap">{t('features.aliasing.ui.actions', 'Actions')}</th>
             </tr>
           </thead>
           <tbody className="[&_tr:not(:last-child)]:border-b [&_tr:not(:last-child)]:border-border [&_tr:hover]:bg-muted/50">
@@ -112,25 +112,25 @@ export function AliasList({ aliasType, disabled }: AliasListProps) {
       {adding ? (
         <div className="space-y-2 p-3 border border-border rounded-md bg-muted/50">
           <Input
-            placeholder={t('features.aliasing.ui.originalPlaceholder', { type: aliasType })}
+            placeholder={t('features.aliasing.ui.originalPlaceholder', 'Enter {{type}} name', { type: aliasType })}
             value={newOriginal}
             onChange={(e) => setNewOriginal(e.target.value)}
             disabled={disabled}
           />
           <Input
-            placeholder={t('features.aliasing.ui.aliasPlaceholder')}
+            placeholder={t('features.aliasing.ui.aliasPlaceholder', 'Enter alias')}
             value={newAlias}
             onChange={(e) => setNewAlias(e.target.value)}
             disabled={disabled}
           />
           <div className="flex gap-2">
-            <Button onClick={handleAdd} size="sm" disabled={disabled}>{t('features.aliasing.ui.add')}</Button>
-            <Button onClick={() => { setAdding(false); setNewOriginal(''); setNewAlias(''); }} size="sm" variant="outline">{t('features.aliasing.ui.cancel')}</Button>
+            <Button onClick={handleAdd} size="sm" disabled={disabled}>{t('features.aliasing.ui.add', 'Add')}</Button>
+            <Button onClick={() => { setAdding(false); setNewOriginal(''); setNewAlias(''); }} size="sm" variant="outline">{t('features.aliasing.ui.cancel', 'Cancel')}</Button>
           </div>
         </div>
       ) : (
         <Button onClick={() => setAdding(true)} disabled={disabled} size="sm">
-          {t('features.aliasing.ui.addType', { type: aliasType })}
+          {t('features.aliasing.ui.addType', 'Add {{type}}', { type: aliasType })}
         </Button>
       )}
     </div>
@@ -183,7 +183,7 @@ function AliasRow({ alias, onUpdate, onDelete, disabled }: AliasRowProps) {
           type="text"
           value={alias.alias}
           onChange={(e) => onUpdate(alias.original, { alias: e.target.value })}
-          placeholder={t('features.aliasing.ui.textToDisplay')}
+          placeholder={t('features.aliasing.ui.textToDisplay', 'Text to display')}
           className="w-full px-2 py-1 text-sm"
           disabled={disabled}
         />
@@ -195,8 +195,8 @@ function AliasRow({ alias, onUpdate, onDelete, disabled }: AliasRowProps) {
           disabled={disabled}
           className="w-full px-2 py-1 text-sm"
         >
-          <option value="color">{t('features.aliasing.ui.colorText')}</option>
-          <option value="icon">{t('features.aliasing.ui.icon')}</option>
+          <option value="color">{t('features.aliasing.ui.colorText', 'Color')}</option>
+          <option value="icon">{t('features.aliasing.ui.icon', 'Icon')}</option>
         </Select>
       </td>
       <td className="px-3 py-2.5 align-middle whitespace-nowrap">
@@ -209,14 +209,14 @@ function AliasRow({ alias, onUpdate, onDelete, disabled }: AliasRowProps) {
               className="w-12 h-7 p-0.5 border border-input rounded cursor-pointer"
               disabled={disabled}
             />
-            <span className="text-sm text-muted-foreground">{t('features.aliasing.ui.color')}</span>
+            <span className="text-sm text-muted-foreground">{t('features.aliasing.ui.color', 'Color')}</span>
           </div>
         ) : (
           <div className="flex items-center gap-2">
             {alias.icon ? (
               <img src={alias.icon} alt="" className="w-6 h-6 rounded" />
             ) : (
-              <span className="text-sm text-muted-foreground">{t('features.aliasing.ui.noIcon')}</span>
+              <span className="text-sm text-muted-foreground">{t('features.aliasing.ui.noIcon', 'No icon')}</span>
             )}
           </div>
         )}
@@ -228,7 +228,7 @@ function AliasRow({ alias, onUpdate, onDelete, disabled }: AliasRowProps) {
           variant="destructive"
           disabled={disabled}
         >
-          {t('features.aliasing.ui.delete')}
+          {t('features.aliasing.ui.delete', 'Delete')}
         </Button>
       </td>
     </tr>
